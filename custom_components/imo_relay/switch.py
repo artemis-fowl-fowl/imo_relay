@@ -86,13 +86,14 @@ class IMORelaySwitch(SwitchEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Allumer le relais."""
         try:
+            # Logique inversée: envoyer False pour allumer
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, True
+                self.client.write_coil, self.address, False
             )
             if result:
                 self._state = True
                 self.async_write_ha_state()
-                _LOGGER.info(f"{self._attr_name} turned ON")
+                _LOGGER.info(f"{self._attr_name} turned ON (sent False)")
             else:
                 _LOGGER.error(f"Failed to turn ON {self._attr_name}")
         except Exception as e:
@@ -101,13 +102,14 @@ class IMORelaySwitch(SwitchEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Éteindre le relais."""
         try:
+            # Logique inversée: envoyer True pour éteindre
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, False
+                self.client.write_coil, self.address, True
             )
             if result:
                 self._state = False
                 self.async_write_ha_state()
-                _LOGGER.info(f"{self._attr_name} turned OFF")
+                _LOGGER.info(f"{self._attr_name} turned OFF (sent True)")
             else:
                 _LOGGER.error(f"Failed to turn OFF {self._attr_name}")
         except Exception as e:
