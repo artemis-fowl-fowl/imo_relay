@@ -177,7 +177,7 @@ class ModbusRTUClient:
             result = self.client.read_holding_registers(
                 address=register_address,
                 count=1,
-                unit=device_id or self.slave_id,
+                slave=device_id or self.slave_id,
             )
 
             if isinstance(result, ExceptionResponse):
@@ -237,7 +237,7 @@ class ModbusRTUClient:
             result = self.client.read_holding_registers(
                 address=register_address,
                 count=1,
-                unit=device_id or self.slave_id,
+                slave=device_id or self.slave_id,
             )
 
             if isinstance(result, ExceptionResponse):
