@@ -33,7 +33,6 @@ class ModbusRTUClient:
         self.name = name
         
         self.client = ModbusSerialClient(
-            method="rtu",
             port=port,
             baudrate=baudrate,
             bytesize=bytesize,
