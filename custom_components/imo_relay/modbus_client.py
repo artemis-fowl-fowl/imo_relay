@@ -149,6 +149,54 @@ class ModbusRTUClient:
         except ModbusException as e:
             _LOGGER.error(f"Modbus error reading coil {address:04X}: {e}")
             return None
+
+    def read_bit(self, address: int, device_id: int | None = None) -> Optional[bool]:
+        """
+        Lire un bit en tentant d'abord les coils (FC01) puis les discrete inputs (FC02).
+
+        Args:
+            address: Adresse du bit
+            device_id: Esclave Modbus à interroger
+
+        Returns:
+            bool ou None
+        """
+        # Essai lecture en coils
+        state = self.read_coil(address, device_id)
+        if state is not None:
+            return state
+
+        # Fallback: lecture en discrete inputs
+        try:
+            if not self.client.connected:
+                _LOGGER.warning("Client not connected, attempting to reconnect...")
+                self.connect()
+
+            _LOGGER.debug(f"Reading discrete input {address:04X} from slave {device_id or self.slave_id}")
+            result = self.client.read_discrete_inputs(
+                address=address,
+                count=1,
+                unit=device_id or self.slave_id,
+            )
+
+            if isinstance(result, ExceptionResponse):
+                _LOGGER.error(f"Modbus exception reading discrete input {address:04X}: {result}")
+                return None
+
+            if result.isError():
+                _LOGGER.error(f"Failed to read discrete input {address:04X}: {result}")
+                return None
+
+            if not hasattr(result, 'bits') or not result.bits:
+                _LOGGER.error(f"Invalid response for discrete input {address:04X}: no bits data")
+                return None
+
+            di_state = result.bits[0]
+            _LOGGER.debug(f"Read discrete input {address:04X} = {di_state}")
+            return di_state
+        except Exception as e:
+            _LOGGER.error(f"Unexpected error reading discrete input {address:04X}: {e}", exc_info=True)
+            return None
         except AttributeError as e:
             _LOGGER.error(f"Attribute error reading coil {address:04X}: {e} - Check Modbus connection")
             return None

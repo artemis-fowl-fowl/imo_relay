@@ -128,12 +128,12 @@ class IMORelaySwitch(SwitchEntity):
     async def async_update(self) -> None:
         """Mettre à jour l'état du relais en lisant le coil Modbus."""
         try:
-            _LOGGER.debug(f"Attempting to read coil state for {self._attr_name} at READ address {self.read_address:04X}")
-            # Lire l'état réel depuis le Modbus à l'adresse de lecture
+            _LOGGER.debug(f"Attempting to read state for {self._attr_name} at READ address {self.read_address:04X}")
+            # Lire l'état réel depuis le Modbus à l'adresse de lecture (auto: coils puis discrete inputs)
             state = await self.hass.async_add_executor_job(
-                self.client.read_coil, self.read_address, self.device_id
+                self.client.read_bit, self.read_address, self.device_id
             )
-            _LOGGER.info(f"Read coil {self.read_address:04X} result: {state}")
+            _LOGGER.info(f"Read bit {self.read_address:04X} result: {state}")
             if state is not None:
                 # État réel sans inversion: True = ON, False = OFF
                 self._state = bool(state)
