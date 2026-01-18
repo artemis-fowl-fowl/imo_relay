@@ -104,11 +104,11 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
                         relays_by_device[device_id] = []
                     relays_by_device[device_id].append(relay_conf)
                 
-                # Lire les états par automate (16 coils d'un coup: Q1-Q8 + Y1-Y8)
+                # Lire les états par automate (holding register 0x0613 contient les 16 bits Q+Y)
                 for device_id, relays in relays_by_device.items():
-                    # Lire 16 coils à partir de 0x0000 (Q1-Q8 puis Y1-Y8)
+                    # Lire le holding register 0x0613 qui contient tous les états (comme scripts.js)
                     bits = await hass.async_add_executor_job(
-                        client.read_coils_bulk, 0x0000, 16, device_id
+                        client.read_coils_bulk, 0x0613, 16, device_id
                     )
                     
                     if bits:

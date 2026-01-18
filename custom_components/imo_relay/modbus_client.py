@@ -156,93 +156,111 @@ class ModbusRTUClient:
 
     def read_bit(self, address: int, device_id: int | None = None) -> Optional[bool]:
         """
-        Lire un bit en tentant d'abord les coils (FC01) puis les discrete inputs (FC02).
+        Lire un bit spécifique en lisant le holding register 0x0613.
 
         Args:
-            address: Adresse du bit
+            address: Adresse logique (0x0000-0x0007 pour Q, 0x0010-0x0017 pour Y)
             device_id: Esclave Modbus à interroger
 
         Returns:
             bool ou None
         """
-        # Essai lecture en coils
-        state = self.read_coil(address, device_id)
-        if state is not None:
-            return state
-
-        # Fallback: lecture en discrete inputs
         try:
             if not self.client.connected:
                 _LOGGER.warning("Client not connected, attempting to reconnect...")
                 self.connect()
 
-            _LOGGER.debug(f"Reading discrete input {address:04X} from slave {device_id or self.slave_id}")
-            result = self.client.read_discrete_inputs(
-                address=address,
+            # Lire le holding register complet
+            register_address = 0x0613
+            _LOGGER.debug(f"Reading register {register_address:04X} to get bit at logical address {address:04X}")
+            
+            result = self.client.read_holding_registers(
+                address=register_address,
                 count=1,
                 unit=device_id or self.slave_id,
             )
 
             if isinstance(result, ExceptionResponse):
-                _LOGGER.error(f"Modbus exception reading discrete input {address:04X}: {result}")
+                _LOGGER.error(f"Modbus exception reading register {register_address:04X}: {result}")
                 return None
 
             if result.isError():
-                _LOGGER.error(f"Failed to read discrete input {address:04X}: {result}")
+                _LOGGER.error(f"Failed to read register {register_address:04X}: {result}")
                 return None
 
-            if not hasattr(result, 'bits') or not result.bits:
-                _LOGGER.error(f"Invalid response for discrete input {address:04X}: no bits data")
+            if not hasattr(result, 'registers') or not result.registers:
+                _LOGGER.error(f"Invalid response for register {register_address:04X}: no registers")
                 return None
 
-            di_state = result.bits[0]
-            _LOGGER.debug(f"Read discrete input {address:04X} = {di_state}")
-            return di_state
+            # Extraire le bit correspondant
+            register_value = result.registers[0]
+            
+            # Conversion adresse logique → index de bit (0-15)
+            if address <= 0x0007:
+                bit_index = address
+            elif address >= 0x0010 and address <= 0x0017:
+                bit_index = 8 + (address - 0x0010)
+            else:
+                _LOGGER.warning(f"Unknown address {address:04X}")
+                return None
+            
+            bit_value = (register_value & (1 << bit_index)) != 0
+            _LOGGER.debug(f"Register 0x{register_value:04X}, bit {bit_index} = {bit_value}")
+            return bit_value
+
         except Exception as e:
-            _LOGGER.error(f"Unexpected error reading discrete input {address:04X}: {e}", exc_info=True)
+            _LOGGER.error(f"Unexpected error reading bit at {address:04X}: {e}", exc_info=True)
             return None
 
     def read_coils_bulk(self, address: int, count: int = 16, device_id: int | None = None) -> Optional[list]:
         """
-        Lire plusieurs coils d'un coup (16 par défaut pour un automate complet Q+Y).
+        Lire l'état des 16 sorties (Q+Y) via holding register 0x0613.
+        Les automates IMO exposent les états dans un registre, pas en coils individuels.
 
         Args:
-            address: Adresse de départ
-            count: Nombre de coils à lire (16 par défaut)
+            address: Adresse holding register (0x0613 pour états des sorties)
+            count: Non utilisé (lecture d'un seul registre 16 bits)
             device_id: Esclave Modbus à interroger
 
         Returns:
-            list[bool] ou None: Liste des bits ou None si erreur
+            list[bool] ou None: Liste de 16 bits extraits du registre
         """
         try:
             if not self.client.connected:
                 _LOGGER.warning("Client not connected, attempting to reconnect...")
                 self.connect()
 
-            _LOGGER.debug(f"Reading {count} coils from {address:04X} on slave {device_id or self.slave_id}")
-            result = self.client.read_coils(
-                address=address,
-                count=count,
+            # Lire le holding register qui contient les 16 états (Q1-Q8 + Y1-Y8)
+            register_address = 0x0613
+            _LOGGER.debug(f"Reading holding register {register_address:04X} on slave {device_id or self.slave_id}")
+            
+            result = self.client.read_holding_registers(
+                address=register_address,
+                count=1,
                 unit=device_id or self.slave_id,
             )
 
             if isinstance(result, ExceptionResponse):
-                _LOGGER.error(f"Modbus exception reading {count} coils from {address:04X}: {result}")
+                _LOGGER.error(f"Modbus exception reading register {register_address:04X}: {result}")
                 return None
 
             if result.isError():
-                _LOGGER.error(f"Failed to read {count} coils from {address:04X}: {result}")
+                _LOGGER.error(f"Failed to read register {register_address:04X}: {result}")
                 return None
 
-            if not hasattr(result, 'bits') or not result.bits:
-                _LOGGER.error(f"Invalid response for {count} coils from {address:04X}: no bits data")
+            if not hasattr(result, 'registers') or not result.registers:
+                _LOGGER.error(f"Invalid response for register {register_address:04X}: no registers data")
                 return None
 
-            _LOGGER.debug(f"Read {count} coils from {address:04X}: {result.bits}")
-            return result.bits
+            # Extraire les 16 bits du registre (comme dans scripts.js)
+            register_value = result.registers[0]
+            bits = [(register_value & (1 << i)) != 0 for i in range(16)]
+            
+            _LOGGER.debug(f"Read register {register_address:04X} = 0x{register_value:04X}, bits: {bits}")
+            return bits
 
         except Exception as e:
-            _LOGGER.error(f"Unexpected error reading {count} coils from {address:04X}: {e}", exc_info=True)
+            _LOGGER.error(f"Unexpected error reading register 0x0613: {e}", exc_info=True)
             return None
 
         except AttributeError as e:
