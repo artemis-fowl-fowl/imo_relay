@@ -56,6 +56,7 @@ class IMORelaySwitch(SwitchEntity):
     """Représente un relais IMO Ismart."""
     
     _attr_has_entity_name = True
+    _attr_assumed_state = False  # L'état est basé sur les dernières commandes envoyées
     
     def __init__(
         self,
@@ -75,7 +76,7 @@ class IMORelaySwitch(SwitchEntity):
         self._attr_icon = icon or "mdi:electric-switch"
         if device_class:
             self._attr_device_class = device_class
-        self._state = None
+        self._state = False  # État par défaut: OFF
     
     @property
     def is_on(self) -> bool | None:
