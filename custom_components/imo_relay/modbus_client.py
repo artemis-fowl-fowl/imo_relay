@@ -84,9 +84,9 @@ class ModbusRTUClient:
             _LOGGER.debug(f"Writing coil {address:04X} = {state}")
             
             result = self.client.write_coil(
-                address=address,
-                value=state,
-                slave=self.slave_id
+                address,
+                state,
+                self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -171,9 +171,9 @@ class ModbusRTUClient:
             _LOGGER.debug(f"Writing register {address:04X} = {value}")
             
             result = self.client.write_register(
-                address=address,
-                value=value,
-                slave=self.slave_id
+                address,
+                value,
+                self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -208,9 +208,9 @@ class ModbusRTUClient:
             _LOGGER.debug(f"Reading register {address:04X}")
             
             result = self.client.read_holding_registers(
-                address=address,
-                count=1,
-                slave=self.slave_id
+                address,
+                1,
+                self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
