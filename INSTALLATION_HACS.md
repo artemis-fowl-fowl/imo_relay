@@ -25,7 +25,7 @@ git commit -m "Initial commit: IMO Ismart Relay Control"
 3. Clone et pousse ton code:
 
 ```bash
-git remote add origin https://github.com/VOTRE_USERNAME/imo_relay.git
+git remote add origin https://github.com/artemis-fowl-fowl/imo_relay.git
 git branch -M main
 git push -u origin main
 ```
@@ -55,7 +55,7 @@ Avant de soumettre à HACS, assure-toi que tu as:
 
 1. Va sur https://hacs.xyz/
 2. Clique **+ Create custom repository**
-3. Entre l'URL: `https://github.com/VOTRE_USERNAME/imo_relay`
+3. Entre l'URL: `https://github.com/artemis-fowl-fowl/imo_relay`
 4. Type: **Integration**
 5. Clique **Create**
 

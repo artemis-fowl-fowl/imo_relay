@@ -30,7 +30,7 @@ Intégration Home Assistant pour contrôler les relais des automates **IMO Ismar
 
 1. Ouvre **HACS** → **Intégrations**
 2. Clique sur le menu **⋮** → **Dépôts personnalisés**
-3. Colle l'URL: `https://github.com/yourusername/imo_relay`
+3. Colle l'URL: `https://github.com/artemis-fowl-fowl/imo_relay`
 4. Catégorie: **Integration**
 5. Clique **Créer**
 6. Trouve **IMO Ismart Relay Control** → **Télécharger**
@@ -41,7 +41,7 @@ Intégration Home Assistant pour contrôler les relais des automates **IMO Ismar
 ```bash
 # Sur ton système HAOS
 cd /config/custom_components/
-git clone https://github.com/yourusername/imo_relay
+git clone https://github.com/artemis-fowl-fowl/imo_relay
 cd imo_relay
 ```
 
@@ -188,8 +188,8 @@ logger:
 
 ## 📞 Support
 
-- **Issues GitHub**: [Signaler un bug](https://github.com/yourusername/imo_relay/issues)
-- **Discussions**: [Demander de l'aide](https://github.com/yourusername/imo_relay/discussions)
+- **Issues GitHub**: [Signaler un bug](https://github.com/artemis-fowl-fowl/imo_relay/issues)
+- **Discussions**: [Demander de l'aide](https://github.com/artemis-fowl-fowl/imo_relay/discussions)
 
 ## 📄 Licence
 
@@ -210,6 +210,6 @@ MIT License - Voir [LICENSE](LICENSE)
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5?style=for-the-badge
 [hacs-url]: https://github.com/hacs/integration
 [license-badge]: https://img.shields.io/badge/License-MIT-blue?style=for-the-badge
-[license-url]: https://github.com/yourusername/imo_relay/blob/main/LICENSE
+[license-url]: https://github.com/artemis-fowl-fowl/imo_relay/blob/main/LICENSE
 [python-badge]: https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge
 [python-url]: https://www.python.org/

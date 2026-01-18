@@ -4,7 +4,7 @@
   "homeassistant": "2024.1.0",
   "iot_class": "local_polling",
   "render_readme": true,
-  "documentation": "https://github.com/yourusername/imo_relay",
-  "issues": "https://github.com/yourusername/imo_relay/issues",
+  "documentation": "https://github.com/artemis-fowl-fowl/imo_relay",
+  "issues": "https://github.com/artemis-fowl-fowl/imo_relay/issues",
   "requirements": ["pymodbus>=3.6.0"]
 }
