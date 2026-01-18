@@ -7,7 +7,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from .const import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_RELAY_NAME,
+    CONF_RELAY_ADDRESS,
+    CONF_RELAY_ICON,
+    CONF_RELAY_DEVICE_CLASS,
+)
 from .modbus_client import ModbusRTUClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,14 +27,27 @@ async def async_setup_platform(
 ) -> None:
     """Set up switch platform from configuration.yaml."""
     client: ModbusRTUClient = hass.data[DOMAIN]["client"]
+    relays_config = hass.data[DOMAIN]["relays"]
     
-    # Créer les entités de relais
-    entities = [
-        IMORelaySwitch(client, "relay_1", 0x0551, "Relay 1"),
-        IMORelaySwitch(client, "relay_2", 0x0552, "Relay 2"),
-        IMORelaySwitch(client, "relay_3", 0x0553, "Relay 3"),
-        IMORelaySwitch(client, "relay_4", 0x0554, "Relay 4"),
-    ]
+    # Créer les entités de relais dynamiquement depuis la config
+    entities = []
+    for idx, relay_conf in enumerate(relays_config):
+        relay_id = f"relay_{idx + 1}"
+        name = relay_conf[CONF_RELAY_NAME]
+        address = relay_conf[CONF_RELAY_ADDRESS]
+        icon = relay_conf.get(CONF_RELAY_ICON, "mdi:electric-switch")
+        device_class = relay_conf.get(CONF_RELAY_DEVICE_CLASS)
+        
+        entities.append(
+            IMORelaySwitch(
+                client=client,
+                relay_id=relay_id,
+                address=address,
+                name=name,
+                icon=icon,
+                device_class=device_class,
+            )
+        )
     
     async_add_entities(entities, True)
 
@@ -36,7 +55,6 @@ async def async_setup_platform(
 class IMORelaySwitch(SwitchEntity):
     """Représente un relais IMO Ismart."""
     
-    _attr_device_class = SwitchDeviceClass.SWITCH
     _attr_has_entity_name = True
     
     def __init__(
@@ -45,6 +63,8 @@ class IMORelaySwitch(SwitchEntity):
         relay_id: str,
         address: int,
         name: str,
+        icon: str | None = None,
+        device_class: str | None = None,
     ):
         """Initialiser le switch."""
         self.client = client
@@ -52,6 +72,9 @@ class IMORelaySwitch(SwitchEntity):
         self.address = address
         self._attr_name = name
         self._attr_unique_id = f"imo_relay_{relay_id}"
+        self._attr_icon = icon or "mdi:electric-switch"
+        if device_class:
+            self._attr_device_class = device_class
         self._state = None
     
     @property

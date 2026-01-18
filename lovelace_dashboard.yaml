@@ -1,4 +1,5 @@
 # Dashboard Lovelace stylisé - Mode: YAML
+# Adapte les entity_id selon tes relais définis dans configuration.yaml
 
 title: IMO Relay Control
 views:
@@ -11,71 +12,39 @@ views:
           # 🎛️ Contrôle des Relais IMO Ismart SMT-CD-T20
           Statut en temps réel de vos automates Modbus RS485
 
-      # Relais 1
+      # Exemple: Pompe Piscine
       - type: custom:button-card
         entity: switch.relay_1
-        name: Relay 1
-        icon: mdi:power-socket
+        name: Pompe Piscine
+        icon: mdi:pump
         size: 20%
         state:
           - value: "on"
             color: rgb(0, 255, 0)
-            icon: mdi:power-socket
+            icon: mdi:pump
           - value: "off"
             color: rgb(200, 200, 200)
-            icon: mdi:power-socket-off
+            icon: mdi:pump-off
         tap_action:
           action: toggle
 
-      # Relais 2
+      # Exemple: Lumière Jardin
       - type: custom:button-card
         entity: switch.relay_2
-        name: Relay 2
-        icon: mdi:power-socket
+        name: Lumière Jardin
+        icon: mdi:lightbulb
         size: 20%
         state:
           - value: "on"
-            color: rgb(0, 255, 0)
-            icon: mdi:power-socket
+            color: rgb(255, 200, 0)
+            icon: mdi:lightbulb-on
           - value: "off"
             color: rgb(200, 200, 200)
-            icon: mdi:power-socket-off
+            icon: mdi:lightbulb-off
         tap_action:
           action: toggle
 
-      # Relais 3
-      - type: custom:button-card
-        entity: switch.relay_3
-        name: Relay 3
-        icon: mdi:power-socket
-        size: 20%
-        state:
-          - value: "on"
-            color: rgb(0, 255, 0)
-            icon: mdi:power-socket
-          - value: "off"
-            color: rgb(200, 200, 200)
-            icon: mdi:power-socket-off
-        tap_action:
-          action: toggle
-
-      # Relais 4
-      - type: custom:button-card
-        entity: switch.relay_4
-        name: Relay 4
-        icon: mdi:power-socket
-        size: 20%
-        state:
-          - value: "on"
-            color: rgb(0, 255, 0)
-            icon: mdi:power-socket
-          - value: "off"
-            color: rgb(200, 200, 200)
-            icon: mdi:power-socket-off
-        tap_action:
-          action: toggle
-
-      # Vue d'ensemble (optionnel - nécessite custom:state-switch-entity-row)
+      # Vue d'ensemble (entities standard - fonctionne sans button-card)
       - type: entities
         title: État des Relais
         entities:

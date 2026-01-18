@@ -6,6 +6,26 @@ imo_relay:
   bytesize: 8
   slave_id: 1
   name: "IMO Ismart SMT-CD-T20"
+  
+  # Définir vos relais/coils personnalisés
+  relays:
+    - name: "Pompe Piscine"
+      address: 0x0551
+      icon: mdi:pump
+      device_class: switch
+    
+    - name: "Lumière Jardin"
+      address: 0x0552
+      icon: mdi:lightbulb
+      device_class: outlet
+    
+    - name: "Portail Garage"
+      address: 0x0553
+      icon: mdi:garage
+    
+    - name: "Ventilateur"
+      address: 0x0554
+      icon: mdi:fan
 
 # Automation exemple
 automation:

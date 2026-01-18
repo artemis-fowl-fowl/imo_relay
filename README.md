@@ -58,7 +58,33 @@ imo_relay:
   bytesize: 8               # Taille des données
   slave_id: 1               # Adresse Modbus de l'automate
   name: "IMO Ismart"        # Nom du dispositif
+  
+  # Définis tes relais/coils personnalisés
+  relays:
+    - name: "Pompe Piscine"
+      address: 0x0551       # Adresse Modbus du coil
+      icon: mdi:pump
+      device_class: switch
+    
+    - name: "Lumière Jardin"
+      address: 0x0552
+      icon: mdi:lightbulb
+      device_class: outlet
+    
+    - name: "Portail Garage"
+      address: 0x0553
+      icon: mdi:garage
+    
+    - name: "Ventilateur"
+      address: 0x0554
+      icon: mdi:fan
 ```
+
+**Options pour chaque relais:**
+- `name`: **(requis)** - Nom affiché dans Home Assistant
+- `address`: **(requis)** - Adresse Modbus du coil (hex ou décimal)
+- `icon`: *(optionnel)* - Icône Material Design (défaut: `mdi:electric-switch`)
+- `device_class`: *(optionnel)* - Type de device (`switch`, `outlet`, etc.)
 
 Puis **redémarre Home Assistant** pour activer l'intégration.
 
@@ -76,11 +102,13 @@ Typiquement: `/dev/ttyUSB0` ou `/dev/ttyUSB1`
 
 ### Via UI Home Assistant
 
-Après installation et redémarrage, tu trouveras les entités:
-- `switch.relay_1` → Relay 1
-- `switch.relay_2` → Relay 2
-- `switch.relay_3` → Relay 3
-- `switch.relay_4` → Relay 4
+Après installation et redémarrage, tu trouveras tes entités avec les noms que tu as définis:
+- `switch.relay_1` → Pompe Piscine
+- `switch.relay_2` → Lumière Jardin
+- `switch.relay_3` → Portail Garage
+- `switch.relay_4` → Ventilateur
+
+Les entity_id sont automatiquement générées: `switch.relay_1`, `switch.relay_2`, etc.
 
 ### Via Automation
 
@@ -114,14 +142,18 @@ data:
   state: true          # true = ON, false = OFF
 ```
 
-## 📊 Adresses Modbus Supportées
+Tu peux utiliser **n'importe quelle adresse Modbus** (coil) de ton automate:
 
-| Relais | Adresse | Type |
-|--------|---------|------|
-| Relay 1 | `0x0551` | Coil (bobine) |
-| Relay 2 | `0x0552` | Coil (bobine) |
-| Relay 3 | `0x0553` | Coil (bobine) |
-| Relay 4 | `0x0554` | Coil (bobine) |
+| Format | Exemple | Description |
+|--------|---------|-------------|
+| Hexadécimal | `0x0551` | Recommandé - plus lisible |
+| Décimal | `1361` | Équivalent de 0x0551 |
+
+**Adresses communes SMT-CD-T20:**
+- `0x0551` - `0x0554` : Relais de sortie 1-4
+- Consulte la doc IMO pour les autres registres
+
+> 💡 Configure autant de relais que nécessaire dans ton `configuration.yaml`
 
 > 💡 Vous pouvez modifier ces adresses dans `const.py` selon votre configuration
 

@@ -7,10 +7,30 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.discovery import async_load_platform
 
-from .const import DOMAIN, CONF_PORT, CONF_BAUDRATE, CONF_BYTESIZE, CONF_SLAVE_ID, CONF_NAME
+from .const import (
+    DOMAIN,
+    CONF_PORT,
+    CONF_BAUDRATE,
+    CONF_BYTESIZE,
+    CONF_SLAVE_ID,
+    CONF_NAME,
+    CONF_RELAYS,
+    CONF_RELAY_NAME,
+    CONF_RELAY_ADDRESS,
+    CONF_RELAY_ICON,
+    CONF_RELAY_DEVICE_CLASS,
+)
 from .modbus_client import ModbusRTUClient
 
 _LOGGER = logging.getLogger(__name__)
+
+# Schéma pour un relais individuel
+RELAY_SCHEMA = vol.Schema({
+    vol.Required(CONF_RELAY_NAME): cv.string,
+    vol.Required(CONF_RELAY_ADDRESS): cv.positive_int,
+    vol.Optional(CONF_RELAY_ICON, default="mdi:electric-switch"): cv.icon,
+    vol.Optional(CONF_RELAY_DEVICE_CLASS): cv.string,
+})
 
 # Schéma de configuration
 CONFIG_SCHEMA = vol.Schema({
@@ -20,6 +40,7 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Required(CONF_BYTESIZE, default=8): cv.positive_int,
         vol.Required(CONF_SLAVE_ID, default=1): cv.positive_int,
         vol.Optional(CONF_NAME, default="IMO Relay"): cv.string,
+        vol.Required(CONF_RELAYS): vol.All(cv.ensure_list, [RELAY_SCHEMA]),
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -51,6 +72,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     hass.data[DOMAIN] = {
         "client": client,
         "config": conf,
+        "relays": conf[CONF_RELAYS],
     }
     
     # Service pour écrire une bobine
