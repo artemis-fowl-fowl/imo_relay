@@ -56,6 +56,10 @@ async def async_setup_platform(
         )
     
     async_add_entities(entities, True)
+    
+    # Enregistrer les entités pour la boucle d'update automatique
+    hass.data[DOMAIN]["entities"] = entities
+
 
 
 class IMORelaySwitch(SwitchEntity):
@@ -102,8 +106,7 @@ class IMORelaySwitch(SwitchEntity):
             )
             if result:
                 _LOGGER.info(f"{self._attr_name} write coil ON command sent")
-                # Lire l'état réel après l'écriture
-                await self.async_update()
+                # Lire l'état réel après l'écriture (sans attendre, la boucle d'update va rafraîchir)
             else:
                 _LOGGER.error(f"Failed to turn ON {self._attr_name}")
         except Exception as e:
@@ -118,8 +121,7 @@ class IMORelaySwitch(SwitchEntity):
             )
             if result:
                 _LOGGER.info(f"{self._attr_name} write coil OFF command sent")
-                # Lire l'état réel après l'écriture
-                await self.async_update()
+                # Lire l'état réel après l'écriture (sans attendre, la boucle d'update va rafraîchir)
             else:
                 _LOGGER.error(f"Failed to turn OFF {self._attr_name}")
         except Exception as e:

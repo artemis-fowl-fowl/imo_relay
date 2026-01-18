@@ -1,5 +1,6 @@
 """Integration IMO Ismart Modbus Relay Control."""
 import logging
+import asyncio
 
 import voluptuous as vol
 from homeassistant.const import Platform
@@ -77,7 +78,22 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         "client": client,
         "config": conf,
         "relays": conf[CONF_RELAYS],
+        "entities": [],  # Liste des entités pour mise à jour globale
     }
+    
+    # Lancer la boucle d'update automatique (toutes les 2 secondes, comme scripts.js)
+    async def update_loop():
+        """Boucle d'update automatique pour tous les relais."""
+        while True:
+            try:
+                await asyncio.sleep(2)  # Update toutes les 2 secondes
+                entities = hass.data[DOMAIN].get("entities", [])
+                for entity in entities:
+                    await entity.async_update()
+            except Exception as e:
+                _LOGGER.error(f"Error in update loop: {e}", exc_info=True)
+    
+    hass.async_create_task(update_loop())
     
     # Service pour écrire une bobine
     async def write_coil_service(call: ServiceCall) -> None:
