@@ -2,289 +2,293 @@
 # Port: /dev/ttyUSB0, Baudrate: 38400, Bytesize: 8
 
 # ============================================================================
-# AUTOMATE 1 - Étage (Slave ID: 1)
-# 16 relais: Q1-Q8 (index 0-7) + Y1-Y8 (index 8-15)
-# Write: 0x2C00-0x2C17 | Read Q: 0x0000-0x0007 | Read Y: 0x0010-0x0017
+# CONFIGURATION UNIQUE IMO RELAY (tous automates via device_id par relais)
+# Écrire/Lire sur plusieurs esclaves dans une seule instance
 # ============================================================================
-imo_relay imo_etage:
+imo_relay:
   port: /dev/ttyUSB0
   baudrate: 38400
   bytesize: 8
   slave_id: 1
+  name: "IMO Multi-Automates"
   relays:
     # Q1-Q8 (Outputs 0-7)
     - name: 'Chambre Parents'
       address: 0x2C00
       read_address: 0x0000
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Dressing'
       address: 0x2C01
       read_address: 0x0001
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Chambre Gabriel'
       address: 0x2C02
       read_address: 0x0002
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Chambre Paul'
       address: 0x2C03
       read_address: 0x0003
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Chambre Sophie'
       address: 0x2C04
       read_address: 0x0004
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'SDB Étage'
       address: 0x2C05
       read_address: 0x0005
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Miroir SDB'
       address: 0x2C06
       read_address: 0x0006
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Douche'
       address: 0x2C07
       read_address: 0x0007
+      device_id: 1
       icon: mdi:shower
       
     # Y1-Y8 (Outputs 8-15)
     - name: 'Grenier'
       address: 0x2C10
       read_address: 0x0010
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Couloir Étage'
       address: 0x2C11
       read_address: 0x0011
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Mezzanine'
       address: 0x2C12
       read_address: 0x0012
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Sejour Étage'
       address: 0x2C13
       read_address: 0x0013
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Passerelle'
       address: 0x2C14
       read_address: 0x0014
+      device_id: 1
       icon: mdi:lightbulb
       
     - name: 'Cabanon'
       address: 0x2C15
       read_address: 0x0015
+      device_id: 1
       icon: mdi:home-lightbulb
       
     - name: 'Salle de Jeux'
       address: 0x2C16
       read_address: 0x0016
+      device_id: 1
       icon: mdi:gamepad-variant
       
     - name: 'WC Étage'
       address: 0x2C17
       read_address: 0x0017
+      device_id: 1
       icon: mdi:toilet
 
-# ============================================================================
-# AUTOMATE 2 - RDC (Slave ID: 2)
-# 16 relais: Q1-Q8 (index 0-7) + Y1-Y8 (index 8-15)
-# Write: 0x2C00-0x2C17 | Read Q: 0x0000-0x0007 | Read Y: 0x0010-0x0017
-# ============================================================================
-imo_relay imo_rdc:
-  port: /dev/ttyUSB0
-  baudrate: 38400
-  bytesize: 8
-  slave_id: 2
-  relays:
+    # ==================== AUTOMATE 2 - RDC (device_id=2) ====================
     # Q1-Q8 (Outputs 0-7)
     - name: 'Salon 1'
       address: 0x2C00
       read_address: 0x0000
+      device_id: 2
       icon: mdi:sofa
       
     - name: 'Salon 2'
       address: 0x2C01
       read_address: 0x0001
+      device_id: 2
       icon: mdi:sofa
       
     - name: 'Cuisine'
       address: 0x2C02
       read_address: 0x0002
+      device_id: 2
       icon: mdi:chef-hat
       
     - name: 'Ilot'
       address: 0x2C03
       read_address: 0x0003
+      device_id: 2
       icon: mdi:lightbulb
       
     - name: 'Evier'
       address: 0x2C04
       read_address: 0x0004
+      device_id: 2
       icon: mdi:water-pump
       
     - name: 'Terrasse'
       address: 0x2C05
       read_address: 0x0005
+      device_id: 2
       icon: mdi:outdoor-lamp
       
     - name: 'Buanderie'
       address: 0x2C06
       read_address: 0x0006
+      device_id: 2
       icon: mdi:washing-machine
       
     - name: 'Miroir Buanderie'
       address: 0x2C07
       read_address: 0x0007
+      device_id: 2
       icon: mdi:lightbulb
       
     # Y1-Y8 (Outputs 8-15)
     - name: 'WC RDC'
       address: 0x2C10
       read_address: 0x0010
+      device_id: 2
       icon: mdi:toilet
       
     - name: 'Hall'
       address: 0x2C11
       read_address: 0x0011
+      device_id: 2
       icon: mdi:door
       
     - name: 'Cellier'
       address: 0x2C12
       read_address: 0x0012
+      device_id: 2
       icon: mdi:lightbulb
       
     - name: 'Atelier'
       address: 0x2C13
       read_address: 0x0013
+      device_id: 2
       icon: mdi:tools
       
     - name: 'Preau'
       address: 0x2C14
       read_address: 0x0014
+      device_id: 2
       icon: mdi:home-roof
       
     - name: 'Garage'
       address: 0x2C15
       read_address: 0x0015
+      device_id: 2
       icon: mdi:garage
       
     - name: 'Cave'
       address: 0x2C16
       read_address: 0x0016
+      device_id: 2
       icon: mdi:beer
       
     - name: 'Cour'
       address: 0x2C17
       read_address: 0x0017
+      device_id: 2
       icon: mdi:outdoor-lamp
 
-# ============================================================================
-# AUTOMATE 3 - Volets Étage (Slave ID: 3)
-# 2 relais seulement: indices 14-15
-# Write: 0x2C16-0x2C17 | Read Y: 0x0016-0x0017
-# ============================================================================
-imo_relay imo_volets_etage:
-  port: /dev/ttyUSB0
-  baudrate: 38400
-  bytesize: 8
-  slave_id: 3
-  relays:
+    # ==================== AUTOMATE 3 - Volets Étage (device_id=3) ====================
     - name: 'Lit Aurel'
       address: 0x2C16
       read_address: 0x0016
+      device_id: 3
       icon: mdi:bed
       
     - name: 'Lit Aline'
       address: 0x2C17
       read_address: 0x0017
+      device_id: 3
       icon: mdi:bed
 
-# ============================================================================
-# AUTOMATE 4 - Volets RDC (Slave ID: 4)
-# 5 relais: indices 10-14
-# Write: 0x2C12-0x2C16 | Read Y: 0x0012-0x0016
-# ============================================================================
-imo_relay imo_volets_rdc:
-  port: /dev/ttyUSB0
-  baudrate: 38400
-  bytesize: 8
-  slave_id: 4
-  relays:
+    # ==================== AUTOMATE 4 - Volets RDC (device_id=4) ====================
     - name: 'Sejour A'
       address: 0x2C12
       read_address: 0x0012
+      device_id: 4
       icon: mdi:lightbulb
       
     - name: 'Sejour B'
       address: 0x2C13
       read_address: 0x0013
+      device_id: 4
       icon: mdi:lightbulb
       
     - name: 'Lit Gabriel'
       address: 0x2C14
       read_address: 0x0014
+      device_id: 4
       icon: mdi:bed
       
     - name: 'Lit Paul'
       address: 0x2C15
       read_address: 0x0015
+      device_id: 4
       icon: mdi:bed
       
     - name: 'Lit Sophie'
       address: 0x2C16
       read_address: 0x0016
+      device_id: 4
       icon: mdi:bed
 
-# ============================================================================
-# AUTOMATE 5 - Équipements (Slave ID: 5)
-# 11 relais: indices 0-6 (outputs) + 107-109 (memstate hack)
-# Write: 0x2C00-0x2C06 + memstate 0x0547-0x0549
-# Read Q: 0x0000-0x0006 | Read M (hack): memstate bits 7-10
-# ============================================================================
-imo_relay imo_equipements:
-  port: /dev/ttyUSB0
-  baudrate: 38400
-  bytesize: 8
-  slave_id: 5
-  relays:
+    # ==================== AUTOMATE 5 - Équipements (device_id=5) ====================
     # Q1-Q7 (Outputs 0-6)
     - name: 'Salon Appoint'
       address: 0x2C00
       read_address: 0x0000
+      device_id: 5
       icon: mdi:radiator
       
     - name: 'Salon Ampli'
       address: 0x2C01
       read_address: 0x0001
+      device_id: 5
       icon: mdi:amplifier
       
     - name: 'Arrosage Zone 1'
       address: 0x2C02
       read_address: 0x0002
+      device_id: 5
       icon: mdi:sprinkler-variant
       
     - name: 'Arrosage Zone 2'
       address: 0x2C03
       read_address: 0x0003
+      device_id: 5
       icon: mdi:sprinkler-variant
       
     - name: 'Garage Porte'
       address: 0x2C04
       read_address: 0x0004
+      device_id: 5
       icon: mdi:garage-variant
       
     - name: 'Radiateur SDB'
       address: 0x2C06
       read_address: 0x0006
+      device_id: 5
       icon: mdi:radiator
       
     # Memstate outputs (hack: index > 100 dans scripts.js)
@@ -294,15 +298,18 @@ imo_relay imo_equipements:
     - name: 'Prise Charge Scooter'
       address: 0x0547
       read_address: 0x0007
+      device_id: 5
       icon: mdi:ev-plug-type2
       
     - name: 'Borne Charge VE'
       address: 0x0548
       read_address: 0x0008
+      device_id: 5
       icon: mdi:ev-station
       
     - name: 'Arrosage Auto'
       address: 0x0549
       read_address: 0x0009
+      device_id: 5
       icon: mdi:water-pump
 

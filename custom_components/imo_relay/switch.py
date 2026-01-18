@@ -14,6 +14,7 @@ from .const import (
     CONF_RELAY_READ_ADDRESS,
     CONF_RELAY_ICON,
     CONF_RELAY_DEVICE_CLASS,
+    CONF_RELAY_DEVICE_ID,
 )
 from .modbus_client import ModbusRTUClient
 
@@ -39,6 +40,7 @@ async def async_setup_platform(
         read_address = relay_conf.get(CONF_RELAY_READ_ADDRESS)  # Optionnel
         icon = relay_conf.get(CONF_RELAY_ICON, "mdi:electric-switch")
         device_class = relay_conf.get(CONF_RELAY_DEVICE_CLASS)
+        device_id = relay_conf.get(CONF_RELAY_DEVICE_ID)
         
         entities.append(
             IMORelaySwitch(
@@ -49,6 +51,7 @@ async def async_setup_platform(
                 name=name,
                 icon=icon,
                 device_class=device_class,
+                device_id=device_id,
             )
         )
     
@@ -70,12 +73,14 @@ class IMORelaySwitch(SwitchEntity):
         name: str,
         icon: str | None = None,
         device_class: str | None = None,
+        device_id: int | None = None,
     ):
         """Initialiser le switch."""
         self.client = client
         self.relay_id = relay_id
         self.address = address  # Adresse pour écrire
         self.read_address = read_address or address  # Adresse pour lire (si différente)
+        self.device_id = device_id
         self._attr_name = name
         self._attr_unique_id = f"imo_relay_{relay_id}"
         self._attr_icon = icon or "mdi:electric-switch"
@@ -93,7 +98,7 @@ class IMORelaySwitch(SwitchEntity):
         try:
             # Envoyer True pour allumer
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, True
+                self.client.write_coil, self.address, True, self.device_id
             )
             if result:
                 _LOGGER.info(f"{self._attr_name} write coil ON command sent")
@@ -109,7 +114,7 @@ class IMORelaySwitch(SwitchEntity):
         try:
             # Envoyer False pour éteindre
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, False
+                self.client.write_coil, self.address, False, self.device_id
             )
             if result:
                 _LOGGER.info(f"{self._attr_name} write coil OFF command sent")
@@ -126,7 +131,7 @@ class IMORelaySwitch(SwitchEntity):
             _LOGGER.debug(f"Attempting to read coil state for {self._attr_name} at READ address {self.read_address:04X}")
             # Lire l'état réel depuis le Modbus à l'adresse de lecture
             state = await self.hass.async_add_executor_job(
-                self.client.read_coil, self.read_address
+                self.client.read_coil, self.read_address, self.device_id
             )
             _LOGGER.info(f"Read coil {self.read_address:04X} result: {state}")
             if state is not None:

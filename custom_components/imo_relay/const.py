@@ -16,6 +16,7 @@ CONF_RELAY_ADDRESS = "address"
 CONF_RELAY_READ_ADDRESS = "read_address"  # Adresse pour lire l'état
 CONF_RELAY_ICON = "icon"
 CONF_RELAY_DEVICE_CLASS = "device_class"
+CONF_RELAY_DEVICE_ID = "device_id"
 
 # Defaults
 DEFAULT_BAUDRATE = 38400

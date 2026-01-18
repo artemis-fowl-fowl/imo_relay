@@ -20,6 +20,7 @@ from .const import (
     CONF_RELAY_READ_ADDRESS,
     CONF_RELAY_ICON,
     CONF_RELAY_DEVICE_CLASS,
+    CONF_RELAY_DEVICE_ID,
 )
 from .modbus_client import ModbusRTUClient
 
@@ -32,6 +33,7 @@ RELAY_SCHEMA = vol.Schema({
     vol.Optional(CONF_RELAY_READ_ADDRESS): cv.positive_int,  # Adresse de lecture optionnelle
     vol.Optional(CONF_RELAY_ICON, default="mdi:electric-switch"): cv.icon,
     vol.Optional(CONF_RELAY_DEVICE_CLASS): cv.string,
+    vol.Optional(CONF_RELAY_DEVICE_ID): cv.positive_int,  # Identifiant esclave spécifique au relais
 })
 
 # Schéma de configuration

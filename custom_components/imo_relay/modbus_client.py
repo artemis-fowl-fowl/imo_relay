@@ -69,7 +69,7 @@ class ModbusRTUClient:
         except Exception as e:
             _LOGGER.error(f"Error closing connection: {e}")
     
-    def write_coil(self, address: int, state: bool) -> bool:
+    def write_coil(self, address: int, state: bool, device_id: int | None = None) -> bool:
         """
         Écrire une bobine (coil).
         
@@ -86,7 +86,7 @@ class ModbusRTUClient:
             result = self.client.write_coil(
                 address,
                 state,
-                device_id=self.slave_id
+                device_id=device_id or self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -107,7 +107,7 @@ class ModbusRTUClient:
             _LOGGER.error(f"Unexpected error writing coil: {e}")
             return False
     
-    def read_coil(self, address: int) -> Optional[bool]:
+    def read_coil(self, address: int, device_id: int | None = None) -> Optional[bool]:
         """
         Lire une bobine (coil).
         
@@ -122,12 +122,12 @@ class ModbusRTUClient:
                 _LOGGER.warning(f"Client not connected, attempting to reconnect...")
                 self.connect()
             
-            _LOGGER.debug(f"Reading coil {address:04X} (dec:{address}) from slave {self.slave_id}")
+            _LOGGER.debug(f"Reading coil {address:04X} (dec:{address}) from slave {device_id or self.slave_id}")
             
             result = self.client.read_coils(
                 address=address,
                 count=1,
-                unit=self.slave_id
+                unit=device_id or self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -156,7 +156,7 @@ class ModbusRTUClient:
             _LOGGER.error(f"Unexpected error reading coil {address:04X}: {e}", exc_info=True)
             return None
     
-    def write_register(self, address: int, value: int) -> bool:
+    def write_register(self, address: int, value: int, device_id: int | None = None) -> bool:
         """
         Écrire un registre.
         
@@ -173,7 +173,7 @@ class ModbusRTUClient:
             result = self.client.write_register(
                 address,
                 value,
-                device_id=self.slave_id
+                device_id=device_id or self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -194,7 +194,7 @@ class ModbusRTUClient:
             _LOGGER.error(f"Unexpected error writing register: {e}")
             return False
     
-    def read_register(self, address: int) -> Optional[int]:
+    def read_register(self, address: int, device_id: int | None = None) -> Optional[int]:
         """
         Lire un registre.
         
@@ -210,7 +210,7 @@ class ModbusRTUClient:
             result = self.client.read_holding_registers(
                 address,
                 count=1,
-                device_id=self.slave_id
+                device_id=device_id or self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
