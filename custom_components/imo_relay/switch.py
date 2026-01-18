@@ -86,14 +86,14 @@ class IMORelaySwitch(SwitchEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Allumer le relais."""
         try:
-            # Logique inversée: envoyer False pour allumer
+            # Envoyer True pour allumer
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, False
+                self.client.write_coil, self.address, True
             )
             if result:
-                self._state = True
-                self.async_write_ha_state()
-                _LOGGER.info(f"{self._attr_name} turned ON (sent False)")
+                _LOGGER.info(f"{self._attr_name} write coil ON command sent")
+                # Lire l'état réel après l'écriture
+                await self.async_update()
             else:
                 _LOGGER.error(f"Failed to turn ON {self._attr_name}")
         except Exception as e:
@@ -102,30 +102,31 @@ class IMORelaySwitch(SwitchEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Éteindre le relais."""
         try:
-            # Logique inversée: envoyer True pour éteindre
+            # Envoyer False pour éteindre
             result = await self.hass.async_add_executor_job(
-                self.client.write_coil, self.address, True
+                self.client.write_coil, self.address, False
             )
             if result:
-                self._state = False
-                self.async_write_ha_state()
-                _LOGGER.info(f"{self._attr_name} turned OFF (sent True)")
+                _LOGGER.info(f"{self._attr_name} write coil OFF command sent")
+                # Lire l'état réel après l'écriture
+                await self.async_update()
             else:
                 _LOGGER.error(f"Failed to turn OFF {self._attr_name}")
         except Exception as e:
             _LOGGER.error(f"Error turning OFF {self._attr_name}: {e}")
     
     async def async_update(self) -> None:
-        """Mettre à jour l'état du relais en lisant le registre/coil."""
+        """Mettre à jour l'état du relais en lisant le coil Modbus."""
         try:
-            # Essayer de lire la coil pour obtenir l'état réel
+            # Lire l'état réel depuis le Modbus
             state = await self.hass.async_add_executor_job(
                 self.client.read_coil, self.address
             )
             if state is not None:
-                # Logique inversée: False = ON, True = OFF
-                self._state = not state
-                _LOGGER.debug(f"Read state of {self._attr_name}: {state} (inverted: {self._state})")
+                # État réel sans inversion: True = ON, False = OFF
+                self._state = bool(state)
+                self.async_write_ha_state()
+                _LOGGER.debug(f"Updated {self._attr_name} state: {self._state}")
             else:
                 _LOGGER.debug(f"Could not read state of {self._attr_name}")
         except Exception as e:
