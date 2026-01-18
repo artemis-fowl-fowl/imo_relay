@@ -83,13 +83,50 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     
     # Lancer la boucle d'update automatique (toutes les 2 secondes, comme scripts.js)
     async def update_loop():
-        """Boucle d'update automatique pour tous les relais."""
+        """Boucle d'update automatique pour tous les relais (lecture groupée par automate)."""
         while True:
             try:
                 await asyncio.sleep(2)  # Update toutes les 2 secondes
+                
                 entities = hass.data[DOMAIN].get("entities", [])
-                for entity in entities:
-                    await entity.async_update()
+                relays_config = hass.data[DOMAIN]["relays"]
+                
+                # Grouper les relais par device_id pour lecturer en masse
+                relays_by_device = {}
+                for relay_conf in relays_config:
+                    device_id = relay_conf.get(CONF_RELAY_DEVICE_ID, conf[CONF_SLAVE_ID])
+                    if device_id not in relays_by_device:
+                        relays_by_device[device_id] = []
+                    relays_by_device[device_id].append(relay_conf)
+                
+                # Lire les états par automate (16 coils d'un coup: Q1-Q8 + Y1-Y8)
+                for device_id, relays in relays_by_device.items():
+                    # Lire 16 coils à partir de 0x0000 (Q1-Q8 puis Y1-Y8)
+                    bits = await hass.async_add_executor_job(
+                        client.read_coils_bulk, 0x0000, 16, device_id
+                    )
+                    
+                    if bits:
+                        # Mettre à jour tous les relais de cet automate
+                        for entity in entities:
+                            # Vérifier si le relais appartient à cet automate
+                            if entity.device_id == device_id:
+                                # Extraire le bit correspondant au read_address
+                                read_addr = entity.read_address
+                                # Conversion: 0x0000-0x0007 = index 0-7, 0x0010-0x0017 = index 8-15
+                                if read_addr <= 0x0007:
+                                    bit_index = read_addr
+                                elif read_addr >= 0x0010 and read_addr <= 0x0017:
+                                    bit_index = 8 + (read_addr - 0x0010)
+                                else:
+                                    _LOGGER.warning(f"Unknown read_address {read_addr:04X} for {entity._attr_name}")
+                                    continue
+                                
+                                if bit_index < len(bits):
+                                    entity._state = bool(bits[bit_index])
+                                    entity.async_write_ha_state()
+                                    _LOGGER.debug(f"Updated {entity._attr_name}: {entity._state}")
+                    
             except Exception as e:
                 _LOGGER.error(f"Error in update loop: {e}", exc_info=True)
     

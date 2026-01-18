@@ -88,9 +88,9 @@ class IMORelaySwitch(SwitchEntity):
         self._attr_name = name
         self._attr_unique_id = f"imo_relay_{relay_id}"
         self._attr_icon = icon or "mdi:electric-switch"
-        if device_class:
-            self._attr_device_class = device_class
+        # Ignorer device_class pour éviter les sliders (juste des switches simples)
         self._state = False  # État par défaut: OFF
+
     
     @property
     def is_on(self) -> bool | None:
@@ -130,17 +130,17 @@ class IMORelaySwitch(SwitchEntity):
     async def async_update(self) -> None:
         """Mettre à jour l'état du relais en lisant le coil Modbus."""
         try:
-            _LOGGER.debug(f"Attempting to read state for {self._attr_name} at READ address {self.read_address:04X}")
+            _LOGGER.debug(f"Manual update for {self._attr_name} at READ address {self.read_address:04X}")
             # Lire l'état réel depuis le Modbus à l'adresse de lecture (auto: coils puis discrete inputs)
             state = await self.hass.async_add_executor_job(
                 self.client.read_bit, self.read_address, self.device_id
             )
-            _LOGGER.info(f"Read bit {self.read_address:04X} result: {state}")
+            _LOGGER.debug(f"Read bit {self.read_address:04X} result: {state}")
             if state is not None:
                 # État réel sans inversion: True = ON, False = OFF
                 self._state = bool(state)
                 self.async_write_ha_state()
-                _LOGGER.info(f"Updated {self._attr_name} state: {self._state}")
+                _LOGGER.debug(f"Updated {self._attr_name} state: {self._state}")
             else:
                 _LOGGER.warning(f"Could not read state of {self._attr_name} (None returned)")
         except Exception as e:

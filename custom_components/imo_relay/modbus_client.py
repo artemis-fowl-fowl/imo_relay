@@ -197,6 +197,50 @@ class ModbusRTUClient:
         except Exception as e:
             _LOGGER.error(f"Unexpected error reading discrete input {address:04X}: {e}", exc_info=True)
             return None
+
+    def read_coils_bulk(self, address: int, count: int = 16, device_id: int | None = None) -> Optional[list]:
+        """
+        Lire plusieurs coils d'un coup (16 par défaut pour un automate complet Q+Y).
+
+        Args:
+            address: Adresse de départ
+            count: Nombre de coils à lire (16 par défaut)
+            device_id: Esclave Modbus à interroger
+
+        Returns:
+            list[bool] ou None: Liste des bits ou None si erreur
+        """
+        try:
+            if not self.client.connected:
+                _LOGGER.warning("Client not connected, attempting to reconnect...")
+                self.connect()
+
+            _LOGGER.debug(f"Reading {count} coils from {address:04X} on slave {device_id or self.slave_id}")
+            result = self.client.read_coils(
+                address=address,
+                count=count,
+                unit=device_id or self.slave_id,
+            )
+
+            if isinstance(result, ExceptionResponse):
+                _LOGGER.error(f"Modbus exception reading {count} coils from {address:04X}: {result}")
+                return None
+
+            if result.isError():
+                _LOGGER.error(f"Failed to read {count} coils from {address:04X}: {result}")
+                return None
+
+            if not hasattr(result, 'bits') or not result.bits:
+                _LOGGER.error(f"Invalid response for {count} coils from {address:04X}: no bits data")
+                return None
+
+            _LOGGER.debug(f"Read {count} coils from {address:04X}: {result.bits}")
+            return result.bits
+
+        except Exception as e:
+            _LOGGER.error(f"Unexpected error reading {count} coils from {address:04X}: {e}", exc_info=True)
+            return None
+
         except AttributeError as e:
             _LOGGER.error(f"Attribute error reading coil {address:04X}: {e} - Check Modbus connection")
             return None
