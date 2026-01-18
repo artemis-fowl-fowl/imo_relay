@@ -1,0 +1,21 @@
+write_coil:
+  name: Écrire une bobine
+  description: "Écrit une valeur sur une bobine Modbus de l'automate IMO."
+  fields:
+    address:
+      name: Adresse
+      description: "L'adresse de la bobine Modbus (en décimal, ex: 11264 pour 0x2C00)"
+      required: true
+      example: 11264
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+    state:
+      name: État
+      description: "L'état souhaité de la bobine (true = ON, false = OFF)"
+      required: true
+      example: true
+      selector:
+        boolean:
