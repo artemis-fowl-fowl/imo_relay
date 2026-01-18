@@ -46,15 +46,19 @@ class ModbusRTUClient:
     def connect(self) -> bool:
         """Connecter au device Modbus."""
         try:
+            if self.client.connected:
+                _LOGGER.info(f"{self.name} already connected to {self.port}")
+                return True
+            
             is_connected = self.client.connect()
             if is_connected:
-                _LOGGER.info(f"{self.name} connected to {self.port}")
+                _LOGGER.info(f"{self.name} connected to {self.port} - slave_id: {self.slave_id}")
                 return True
             else:
-                _LOGGER.error(f"Failed to connect to {self.port}")
+                _LOGGER.error(f"Failed to connect to {self.port} - Check device and port")
                 return False
         except Exception as e:
-            _LOGGER.error(f"Connection error: {e}")
+            _LOGGER.error(f"Connection error on {self.port}: {e}", exc_info=True)
             return False
     
     def close(self) -> None:
@@ -114,7 +118,11 @@ class ModbusRTUClient:
             bool ou None: État de la bobine ou None si erreur
         """
         try:
-            _LOGGER.debug(f"Reading coil {address:04X}")
+            if not self.client.connected:
+                _LOGGER.warning(f"Client not connected, attempting to reconnect...")
+                self.connect()
+            
+            _LOGGER.debug(f"Reading coil {address:04X} (dec:{address}) from slave {self.slave_id}")
             
             result = self.client.read_coils(
                 address=address,
@@ -123,22 +131,29 @@ class ModbusRTUClient:
             )
             
             if isinstance(result, ExceptionResponse):
-                _LOGGER.error(f"Modbus exception: {result}")
+                _LOGGER.error(f"Modbus exception reading coil {address:04X}: {result}")
                 return None
             
             if result.isError():
-                _LOGGER.error(f"Failed to read coil: {result}")
+                _LOGGER.error(f"Failed to read coil {address:04X}: {result}")
                 return None
             
-            state = result.bits[0] if result.bits else False
+            if not hasattr(result, 'bits') or not result.bits:
+                _LOGGER.error(f"Invalid response for coil {address:04X}: no bits data")
+                return None
+            
+            state = result.bits[0]
             _LOGGER.debug(f"Read coil {address:04X} = {state}")
             return state
             
         except ModbusException as e:
-            _LOGGER.error(f"Modbus error: {e}")
+            _LOGGER.error(f"Modbus error reading coil {address:04X}: {e}")
+            return None
+        except AttributeError as e:
+            _LOGGER.error(f"Attribute error reading coil {address:04X}: {e} - Check Modbus connection")
             return None
         except Exception as e:
-            _LOGGER.error(f"Unexpected error reading coil: {e}")
+            _LOGGER.error(f"Unexpected error reading coil {address:04X}: {e}", exc_info=True)
             return None
     
     def write_register(self, address: int, value: int) -> bool:

@@ -114,13 +114,17 @@ class IMORelaySwitch(SwitchEntity):
     
     async def async_update(self) -> None:
         """Mettre à jour l'état du relais."""
-        try:
-            state = await self.hass.async_add_executor_job(
-                self.client.read_coil, self.address
-            )
-            if state is not None:
-                self._state = state
-            else:
-                _LOGGER.warning(f"Failed to read state of {self._attr_name}")
-        except Exception as e:
-            _LOGGER.error(f"Error updating {self._attr_name}: {e}")
+        # Désactivé pour éviter les erreurs de lecture
+        # Les relais Modbus RTU ne supportent pas toujours la lecture d'état
+        # L'état est mis à jour après chaque write_coil
+        pass
+        # try:
+        #     state = await self.hass.async_add_executor_job(
+        #         self.client.read_coil, self.address
+        #     )
+        #     if state is not None:
+        #         self._state = state
+        #     else:
+        #         _LOGGER.warning(f"Failed to read state of {self._attr_name}")
+        # except Exception as e:
+        #     _LOGGER.error(f"Error updating {self._attr_name}: {e}")
