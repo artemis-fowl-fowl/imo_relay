@@ -49,7 +49,7 @@ Puis redémarre Home Assistant.
 
 ## ⚙️ Configuration
 
-### Dans `configuration.yaml`:
+Après installation, ajoute dans ton **`configuration.yaml`**:
 
 ```yaml
 imo_relay:
@@ -59,6 +59,8 @@ imo_relay:
   slave_id: 1               # Adresse Modbus de l'automate
   name: "IMO Ismart"        # Nom du dispositif
 ```
+
+Puis **redémarre Home Assistant** pour activer l'intégration.
 
 ### Trouver le port USB sur Raspberry Pi:
 

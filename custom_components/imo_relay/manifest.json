@@ -2,11 +2,12 @@
   "domain": "imo_relay",
   "name": "IMO Ismart Relay Control",
   "codeowners": ["@gabriel"],
-  "config_flow": true,
-  "documentation": "https://github.com",
+  "config_flow": false,
+  "documentation": "https://github.com/artemis-fowl-fowl/imo_relay",
   "requirements": [
     "pymodbus==3.6.0"
   ],
   "version": "1.0.0",
-  "homeassistant": "2024.1.0"
+  "homeassistant": "2024.1.0",
+  "iot_class": "local_polling"
 }

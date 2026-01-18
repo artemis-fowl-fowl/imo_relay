@@ -3,24 +3,24 @@ import logging
 from typing import Any
 
 from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from .const import DOMAIN, CONF_NAME
+from .const import DOMAIN
 from .modbus_client import ModbusRTUClient
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(
+async def async_setup_platform(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    config: ConfigType,
     async_add_entities: AddEntitiesCallback,
+    discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up switch platform from a config entry."""
-    client: ModbusRTUClient = hass.data[DOMAIN][config_entry.entry_id]["client"]
-    config = hass.data[DOMAIN][config_entry.entry_id]["config"]
+    """Set up switch platform from configuration.yaml."""
+    client: ModbusRTUClient = hass.data[DOMAIN]["client"]
     
     # Créer les entités de relais
     entities = [
@@ -30,7 +30,7 @@ async def async_setup_entry(
         IMORelaySwitch(client, "relay_4", 0x0554, "Relay 4"),
     ]
     
-    async_add_entities(entities)
+    async_add_entities(entities, True)
 
 
 class IMORelaySwitch(SwitchEntity):
