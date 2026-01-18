@@ -17,6 +17,7 @@ from .const import (
     CONF_RELAYS,
     CONF_RELAY_NAME,
     CONF_RELAY_ADDRESS,
+    CONF_RELAY_READ_ADDRESS,
     CONF_RELAY_ICON,
     CONF_RELAY_DEVICE_CLASS,
 )
@@ -28,6 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 RELAY_SCHEMA = vol.Schema({
     vol.Required(CONF_RELAY_NAME): cv.string,
     vol.Required(CONF_RELAY_ADDRESS): cv.positive_int,
+    vol.Optional(CONF_RELAY_READ_ADDRESS): cv.positive_int,  # Adresse de lecture optionnelle
     vol.Optional(CONF_RELAY_ICON, default="mdi:electric-switch"): cv.icon,
     vol.Optional(CONF_RELAY_DEVICE_CLASS): cv.string,
 })

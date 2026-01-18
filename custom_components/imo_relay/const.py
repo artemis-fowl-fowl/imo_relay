@@ -13,6 +13,7 @@ CONF_RELAYS = "relays"
 # Relay configuration keys
 CONF_RELAY_NAME = "name"
 CONF_RELAY_ADDRESS = "address"
+CONF_RELAY_READ_ADDRESS = "read_address"  # Adresse pour lire l'état
 CONF_RELAY_ICON = "icon"
 CONF_RELAY_DEVICE_CLASS = "device_class"
 

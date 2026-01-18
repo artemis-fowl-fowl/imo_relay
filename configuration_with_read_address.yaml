@@ -1,0 +1,91 @@
+# Configuration avec adresses de lecture séparées
+# Utilisez cette config si vos automates IMO ont des adresses différentes pour lire et écrire
+
+imo_relay:
+  port: /dev/ttyUSB0
+  baudrate: 38400
+  bytesize: 8
+  slave_id: 1
+  name: "Automate 1 - Étage"
+  
+  relays:
+    # Exemple: écrire à 0x2C00, lire à 0x0000
+    - name: "Chambre Gabriel"
+      address: 11264        # 0x2C00 pour écrire
+      read_address: 0       # 0x0000 pour lire
+      icon: "mdi:lightbulb"
+    
+    - name: "Salle de bain Gabriel"
+      address: 11265        # 0x2C01 pour écrire
+      read_address: 1       # 0x0001 pour lire
+      icon: "mdi:shower"
+    
+    - name: "WC Gabriel"
+      address: 11266        # 0x2C02
+      read_address: 2       # 0x0002
+      icon: "mdi:toilet"
+    
+    - name: "Dressing"
+      address: 11267        # 0x2C03
+      read_address: 3       # 0x0003
+      icon: "mdi:hanger"
+    
+    - name: "Couloir Étage"
+      address: 11268        # 0x2C04
+      read_address: 4       # 0x0004
+      icon: "mdi:lightbulb"
+    
+    - name: "Chambre Parents"
+      address: 11269        # 0x2C05
+      read_address: 5       # 0x0005
+      icon: "mdi:bed"
+    
+    - name: "Salle de bain Parents"
+      address: 11270        # 0x2C06
+      read_address: 6       # 0x0006
+      icon: "mdi:shower"
+    
+    - name: "WC Parents"
+      address: 11271        # 0x2C07
+      read_address: 7       # 0x0007
+      icon: "mdi:toilet"
+    
+    - name: "Chambre Enfant 1"
+      address: 11272        # 0x2C08
+      read_address: 8       # 0x0008
+      icon: "mdi:account-child"
+    
+    - name: "Salle de bain Enfant 1"
+      address: 11273        # 0x2C09
+      read_address: 9       # 0x0009
+      icon: "mdi:shower"
+    
+    - name: "Chambre Enfant 2"
+      address: 11274        # 0x2C0A
+      read_address: 10      # 0x000A
+      icon: "mdi:account-child"
+    
+    - name: "Salle de bain Enfant 2"
+      address: 11275        # 0x2C0B
+      read_address: 11      # 0x000B
+      icon: "mdi:shower"
+    
+    - name: "Chambre Invités"
+      address: 11276        # 0x2C0C
+      read_address: 12      # 0x000C
+      icon: "mdi:bed"
+    
+    - name: "Salle de bain Invités"
+      address: 11277        # 0x2C0D
+      read_address: 13      # 0x000D
+      icon: "mdi:shower"
+    
+    - name: "Buanderie"
+      address: 11278        # 0x2C0E
+      read_address: 14      # 0x000E
+      icon: "mdi:washing-machine"
+    
+    - name: "Garage Étage"
+      address: 11279        # 0x2C0F
+      read_address: 15      # 0x000F
+      icon: "mdi:garage"

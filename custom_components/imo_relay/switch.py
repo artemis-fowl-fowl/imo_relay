@@ -11,6 +11,7 @@ from .const import (
     DOMAIN,
     CONF_RELAY_NAME,
     CONF_RELAY_ADDRESS,
+    CONF_RELAY_READ_ADDRESS,
     CONF_RELAY_ICON,
     CONF_RELAY_DEVICE_CLASS,
 )
@@ -35,6 +36,7 @@ async def async_setup_platform(
         relay_id = f"relay_{idx + 1}"
         name = relay_conf[CONF_RELAY_NAME]
         address = relay_conf[CONF_RELAY_ADDRESS]
+        read_address = relay_conf.get(CONF_RELAY_READ_ADDRESS)  # Optionnel
         icon = relay_conf.get(CONF_RELAY_ICON, "mdi:electric-switch")
         device_class = relay_conf.get(CONF_RELAY_DEVICE_CLASS)
         
@@ -43,6 +45,7 @@ async def async_setup_platform(
                 client=client,
                 relay_id=relay_id,
                 address=address,
+                read_address=read_address,
                 name=name,
                 icon=icon,
                 device_class=device_class,
@@ -63,6 +66,7 @@ class IMORelaySwitch(SwitchEntity):
         client: ModbusRTUClient,
         relay_id: str,
         address: int,
+        read_address: int | None,
         name: str,
         icon: str | None = None,
         device_class: str | None = None,
@@ -70,7 +74,8 @@ class IMORelaySwitch(SwitchEntity):
         """Initialiser le switch."""
         self.client = client
         self.relay_id = relay_id
-        self.address = address
+        self.address = address  # Adresse pour écrire
+        self.read_address = read_address or address  # Adresse pour lire (si différente)
         self._attr_name = name
         self._attr_unique_id = f"imo_relay_{relay_id}"
         self._attr_icon = icon or "mdi:electric-switch"
@@ -118,12 +123,12 @@ class IMORelaySwitch(SwitchEntity):
     async def async_update(self) -> None:
         """Mettre à jour l'état du relais en lisant le coil Modbus."""
         try:
-            _LOGGER.debug(f"Attempting to read coil state for {self._attr_name} at address {self.address:04X}")
-            # Lire l'état réel depuis le Modbus
+            _LOGGER.debug(f"Attempting to read coil state for {self._attr_name} at READ address {self.read_address:04X}")
+            # Lire l'état réel depuis le Modbus à l'adresse de lecture
             state = await self.hass.async_add_executor_job(
-                self.client.read_coil, self.address
+                self.client.read_coil, self.read_address
             )
-            _LOGGER.info(f"Read coil {self.address:04X} result: {state}")
+            _LOGGER.info(f"Read coil {self.read_address:04X} result: {state}")
             if state is not None:
                 # État réel sans inversion: True = ON, False = OFF
                 self._state = bool(state)
