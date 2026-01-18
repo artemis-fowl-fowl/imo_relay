@@ -1,440 +1,308 @@
-# Configuration Home Assistant Complète - IMO Ismart Modbus
-# Configuration pour 3 instances (Automate 1, 2 et 5)
+# Configuration complète pour les 5 automates IMO Ismart SMT-CD-T20 3RD
+# Port: /dev/ttyUSB0, Baudrate: 38400, Bytesize: 8
 
-homeassistant:
-  name: Maison IMO
-  latitude: 48.8566
-  longitude: 2.3522
-  elevation: 0
-  unit_system: metric
-  time_zone: Europe/Paris
-
-# ==================== INSTANCE 1: AUTOMATE 1 - ÉTAGE ====================
+# ============================================================================
+# AUTOMATE 1 - Étage (Slave ID: 1)
+# 16 relais: Q1-Q8 (index 0-7) + Y1-Y8 (index 8-15)
+# Write: 0x2C00-0x2C17 | Read Q: 0x0000-0x0007 | Read Y: 0x0010-0x0017
+# ============================================================================
 imo_relay:
-  port: "/dev/ttyUSB0"
-  baudrate: 38400
-  bytesize: 8
-  slave_id: 1
-  name: "Automate 1 - Étage"
-  relays:
-    # Chambre Parents
-    - name: "Chambre Parents"
-      address: 0x2C00
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Dressing
-    - name: "Dressing"
-      address: 0x2C01
-      icon: mdi:hanger
-      device_class: switch
-    
-    # Chambre Gabriel
-    - name: "Chambre Gabriel"
-      address: 0x2C02
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Chambre Paul
-    - name: "Chambre Paul"
-      address: 0x2C03
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Chambre Sophie
-    - name: "Chambre Sophie"
-      address: 0x2C04
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Salle de bain
-    - name: "SDB Éclairage"
-      address: 0x2C05
-      icon: mdi:shower
-      device_class: switch
-    
-    # Miroir SDB
-    - name: "Miroir SDB"
-      address: 0x2C06
-      icon: mdi:mirror
-      device_class: switch
-    
-    # Douche
-    - name: "Douche Éclairage"
-      address: 0x2C07
-      icon: mdi:shower
-      device_class: switch
-    
-    # Grenier
-    - name: "Grenier"
-      address: 0x2C10
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Couloir Étage
-    - name: "Couloir Étage"
-      address: 0x2C11
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Mezzanine
-    - name: "Mezzanine"
-      address: 0x2C12
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Séjour Étage
-    - name: "Séjour Étage"
-      address: 0x2C13
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Passerelle
-    - name: "Passerelle"
-      address: 0x2C14
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Cabanon
-    - name: "Cabanon"
-      address: 0x2C15
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Suite Développement Jeunes
-    - name: "SDJ"
-      address: 0x2C16
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # WC Étage
-    - name: "WC Étage"
-      address: 0x2C17
-      icon: mdi:toilet
-      device_class: switch
+  - name: imo_etage
+    port: /dev/ttyUSB0
+    baudrate: 38400
+    bytesize: 8
+    slave_id: 1
+    relays:
+      # Q1-Q8 (Outputs 0-7)
+      - name: 'Chambre Parents'
+        address: 0x2C00
+        read_address: 0x0000
+        icon: mdi:lightbulb
+        
+      - name: 'Dressing'
+        address: 0x2C01
+        read_address: 0x0001
+        icon: mdi:lightbulb
+        
+      - name: 'Chambre Gabriel'
+        address: 0x2C02
+        read_address: 0x0002
+        icon: mdi:lightbulb
+        
+      - name: 'Chambre Paul'
+        address: 0x2C03
+        read_address: 0x0003
+        icon: mdi:lightbulb
+        
+      - name: 'Chambre Sophie'
+        address: 0x2C04
+        read_address: 0x0004
+        icon: mdi:lightbulb
+        
+      - name: 'SDB Étage'
+        address: 0x2C05
+        read_address: 0x0005
+        icon: mdi:lightbulb
+        
+      - name: 'Miroir SDB'
+        address: 0x2C06
+        read_address: 0x0006
+        icon: mdi:lightbulb
+        
+      - name: 'Douche'
+        address: 0x2C07
+        read_address: 0x0007
+        icon: mdi:shower
+        
+      # Y1-Y8 (Outputs 8-15)
+      - name: 'Grenier'
+        address: 0x2C10
+        read_address: 0x0010
+        icon: mdi:lightbulb
+        
+      - name: 'Couloir Étage'
+        address: 0x2C11
+        read_address: 0x0011
+        icon: mdi:lightbulb
+        
+      - name: 'Mezzanine'
+        address: 0x2C12
+        read_address: 0x0012
+        icon: mdi:lightbulb
+        
+      - name: 'Sejour Étage'
+        address: 0x2C13
+        read_address: 0x0013
+        icon: mdi:lightbulb
+        
+      - name: 'Passerelle'
+        address: 0x2C14
+        read_address: 0x0014
+        icon: mdi:lightbulb
+        
+      - name: 'Cabanon'
+        address: 0x2C15
+        read_address: 0x0015
+        icon: mdi:home-lightbulb
+        
+      - name: 'Salle de Jeux'
+        address: 0x2C16
+        read_address: 0x0016
+        icon: mdi:gamepad-variant
+        
+      - name: 'WC Étage'
+        address: 0x2C17
+        read_address: 0x0017
+        icon: mdi:toilet
 
-# ==================== INSTANCE 2: AUTOMATE 2 - RDC ====================
-# Pour ajouter une 2ème instance, duplique cette config avec un nom d'instance différent
-# À ajouter après la première instance imo_relay:
-# imo_relay_rdc:
-#   port: "/dev/ttyUSB0"
-#   baudrate: 38400
-#   bytesize: 8
-#   slave_id: 2
-#   name: "Automate 2 - RDC"
-#   relays:
-    # Salon 1
-    - name: "Salon 1"
-      address: 0x2C00
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Salon 2
-    - name: "Salon 2"
-      address: 0x2C01
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Cuisine
-    - name: "Cuisine"
-      address: 0x2C02
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Îlot Cuisine
-    - name: "Îlot Cuisine"
-      address: 0x2C03
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Évier
-    - name: "Évier"
-      address: 0x2C04
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Terrasse
-    - name: "Terrasse"
-      address: 0x2C05
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Buanderie
-    - name: "Buanderie"
-      address: 0x2C06
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Miroir Salle de bain RDC
-    - name: "Miroir SDB RDC"
-      address: 0x2C07
-      icon: mdi:mirror
-      device_class: switch
-    
-    # WC RDC
-    - name: "WC RDC"
-      address: 0x2C10
-      icon: mdi:toilet
-      device_class: switch
-    
-    # Hall
-    - name: "Hall"
-      address: 0x2C11
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Cellier
-    - name: "Cellier"
-      address: 0x2C12
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Atelier
-    - name: "Atelier"
-      address: 0x2C13
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Préau
-    - name: "Préau"
-      address: 0x2C14
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Garage
-    - name: "Garage Éclairage"
-      address: 0x2C15
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Cave
-    - name: "Cave"
-      address: 0x2C16
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Cour
-    - name: "Cour Éclairage"
-      address: 0x2C17
-      icon: mdi:lightbulb
-      device_class: switch
+# ============================================================================
+# AUTOMATE 2 - RDC (Slave ID: 2)
+# 16 relais: Q1-Q8 (index 0-7) + Y1-Y8 (index 8-15)
+# Write: 0x2C00-0x2C17 | Read Q: 0x0000-0x0007 | Read Y: 0x0010-0x0017
+# ============================================================================
+  - name: imo_rdc
+    port: /dev/ttyUSB0
+    baudrate: 38400
+    bytesize: 8
+    slave_id: 2
+    relays:
+      # Q1-Q8 (Outputs 0-7)
+      - name: 'Salon 1'
+        address: 0x2C00
+        read_address: 0x0000
+        icon: mdi:sofa
+        
+      - name: 'Salon 2'
+        address: 0x2C01
+        read_address: 0x0001
+        icon: mdi:sofa
+        
+      - name: 'Cuisine'
+        address: 0x2C02
+        read_address: 0x0002
+        icon: mdi:chef-hat
+        
+      - name: 'Ilot'
+        address: 0x2C03
+        read_address: 0x0003
+        icon: mdi:lightbulb
+        
+      - name: 'Evier'
+        address: 0x2C04
+        read_address: 0x0004
+        icon: mdi:water-pump
+        
+      - name: 'Terrasse'
+        address: 0x2C05
+        read_address: 0x0005
+        icon: mdi:outdoor-lamp
+        
+      - name: 'Buanderie'
+        address: 0x2C06
+        read_address: 0x0006
+        icon: mdi:washing-machine
+        
+      - name: 'Miroir Buanderie'
+        address: 0x2C07
+        read_address: 0x0007
+        icon: mdi:lightbulb
+        
+      # Y1-Y8 (Outputs 8-15)
+      - name: 'WC RDC'
+        address: 0x2C10
+        read_address: 0x0010
+        icon: mdi:toilet
+        
+      - name: 'Hall'
+        address: 0x2C11
+        read_address: 0x0011
+        icon: mdi:door
+        
+      - name: 'Cellier'
+        address: 0x2C12
+        read_address: 0x0012
+        icon: mdi:lightbulb
+        
+      - name: 'Atelier'
+        address: 0x2C13
+        read_address: 0x0013
+        icon: mdi:tools
+        
+      - name: 'Preau'
+        address: 0x2C14
+        read_address: 0x0014
+        icon: mdi:home-roof
+        
+      - name: 'Garage'
+        address: 0x2C15
+        read_address: 0x0015
+        icon: mdi:garage
+        
+      - name: 'Cave'
+        address: 0x2C16
+        read_address: 0x0016
+        icon: mdi:beer
+        
+      - name: 'Cour'
+        address: 0x2C17
+        read_address: 0x0017
+        icon: mdi:outdoor-lamp
 
-# ==================== INSTANCE 3: AUTOMATE 5 - ÉQUIPEMENTS ====================
-# À ajouter après les autres instances:
-# imo_relay_equipements:
-#   port: "/dev/ttyUSB0"
-#   baudrate: 38400
-#   bytesize: 8
-#   slave_id: 5
-#   name: "Automate 5 - Équipements"
-#   relays:
-    # Radiateur SDB
-    - name: "Radiateur SDB"
-      address: 0x2C06
-      icon: mdi:radiator
-      device_class: switch
-    
-    # Salon Point A
-    - name: "Salon Point A"
-      address: 0x2C00
-      icon: mdi:lightbulb
-      device_class: switch
-    
-    # Ampli Salon
-    - name: "Ampli Salon"
-      address: 0x2C01
-      icon: mdi:amplifier
-      device_class: switch
-    
-    # Arrosage Zone 1
-    - name: "Arrosage Zone 1"
-      address: 0x2C02
-      icon: mdi:sprinkler
-      device_class: switch
-    
-    # Arrosage Zone 2
-    - name: "Arrosage Zone 2"
-      address: 0x2C03
-      icon: mdi:sprinkler
-      device_class: switch
-    
-    # Arrosage Auto
-    - name: "Arrosage Auto"
-      address: 0x0549
-      icon: mdi:sprinkler
-      device_class: switch
-    
-    # Borne Charge VE
-    - name: "Borne Charge VE"
-      address: 0x0548
-      icon: mdi:ev-station
-      device_class: outlet
-    
-    # Prise Charge Scooter
-    - name: "Prise Charge Scooter"
-      address: 0x0547
-      icon: mdi:power-plug
-      device_class: outlet
-    
-    # Alarme
-    - name: "Alarme Maison"
-      address: 0x2C09
-      icon: mdi:alarm
-      device_class: switch
-    
-    # Portail Cour
-    - name: "Portail Cour"
-      address: 0x2C13
-      icon: mdi:gate
-      device_class: switch
-    
-    # Porte Garage
-    - name: "Porte Garage"
-      address: 0x2C04
-      icon: mdi:garage
-      device_class: switch
+# ============================================================================
+# AUTOMATE 3 - Volets Étage (Slave ID: 3)
+# 2 relais seulement: indices 14-15
+# Write: 0x2C16-0x2C17 | Read Y: 0x0016-0x0017
+# ============================================================================
+  - name: imo_volets_etage
+    port: /dev/ttyUSB0
+    baudrate: 38400
+    bytesize: 8
+    slave_id: 3
+    relays:
+      - name: 'Lit Aurel'
+        address: 0x2C16
+        read_address: 0x0016
+        icon: mdi:bed
+        
+      - name: 'Lit Aline'
+        address: 0x2C17
+        read_address: 0x0017
+        icon: mdi:bed
 
-# ==================== LOGGER ====================
-logger:
-  default: warning
-  logs:
-    custom_components.imo_relay: debug
-    pymodbus.client: warning
+# ============================================================================
+# AUTOMATE 4 - Volets RDC (Slave ID: 4)
+# 5 relais: indices 10-14
+# Write: 0x2C12-0x2C16 | Read Y: 0x0012-0x0016
+# ============================================================================
+  - name: imo_volets_rdc
+    port: /dev/ttyUSB0
+    baudrate: 38400
+    bytesize: 8
+    slave_id: 4
+    relays:
+      - name: 'Sejour A'
+        address: 0x2C12
+        read_address: 0x0012
+        icon: mdi:lightbulb
+        
+      - name: 'Sejour B'
+        address: 0x2C13
+        read_address: 0x0013
+        icon: mdi:lightbulb
+        
+      - name: 'Lit Gabriel'
+        address: 0x2C14
+        read_address: 0x0014
+        icon: mdi:bed
+        
+      - name: 'Lit Paul'
+        address: 0x2C15
+        read_address: 0x0015
+        icon: mdi:bed
+        
+      - name: 'Lit Sophie'
+        address: 0x2C16
+        read_address: 0x0016
+        icon: mdi:bed
 
-# ==================== AUTOMATIONS ====================
-automation:
-  # Automatisation des lumières par motion (exemple)
-  - alias: "Lumière couloir auto"
-    trigger:
-      platform: time_pattern
-      minutes: "/5"
-    condition:
-      - condition: time
-        after: "22:00:00"
-        before: "06:00:00"
-    action:
-      service: switch.turn_on
-      target:
-        entity_id: switch.relay_9
-
-# ==================== SCRIPTS ====================
-script:
-  allumer_tous_les_eclairages:
-    sequence:
-      - service: switch.turn_on
-        target:
-          entity_id:
-            - switch.relay_1
-            - switch.relay_2
-            - switch.relay_3
-            - switch.relay_4
-            - switch.relay_5
-            - switch.relay_7
-            - switch.relay_9
-            - switch.relay_10
-            - switch.relay_11
-            - switch.relay_12
-            - switch.relay_13
-            - switch.relay_14
-            - switch.relay_15
-            - switch.relay_16
-  
-  eteindre_tous_les_eclairages:
-    sequence:
-      - service: switch.turn_off
-        target:
-          entity_id:
-            - switch.relay_1
-            - switch.relay_2
-            - switch.relay_3
-            - switch.relay_4
-            - switch.relay_5
-            - switch.relay_7
-            - switch.relay_9
-            - switch.relay_10
-            - switch.relay_11
-            - switch.relay_12
-            - switch.relay_13
-            - switch.relay_14
-            - switch.relay_15
-            - switch.relay_16
-
-# ==================== INPUT BOOLEAN (pour tester) ====================
-input_boolean:
-  test_mode:
-    name: "Mode Test"
-    icon: mdi:test-tube
-  
-  allumer_etage:
-    name: "Allumer Étage"
-    icon: mdi:lightbulb
-
-# ==================== GROUPS ====================
-homeassistant:
-  customize:
-    group.eclairages_etage:
-      icon: mdi:lightbulb-group
-    group.eclairages_rdc:
-      icon: mdi:lightbulb-group
-    group.equipements:
-      icon: mdi:cog
-
-group:
-  eclairages_etage:
-    name: "Éclairages Étage"
-    entities:
-      - switch.relay_1
-      - switch.relay_2
-      - switch.relay_3
-      - switch.relay_4
-      - switch.relay_5
-      - switch.relay_6
-      - switch.relay_7
-      - switch.relay_8
-      - switch.relay_9
-      - switch.relay_10
-      - switch.relay_11
-      - switch.relay_12
-      - switch.relay_13
-      - switch.relay_14
-      - switch.relay_15
-      - switch.relay_16
-  
-  eclairages_rdc:
-    name: "Éclairages RDC"
-    entities:
-      - switch.relay_17
-      - switch.relay_18
-      - switch.relay_19
-      - switch.relay_20
-      - switch.relay_21
-      - switch.relay_22
-      - switch.relay_23
-      - switch.relay_24
-      - switch.relay_25
-      - switch.relay_26
-      - switch.relay_27
-      - switch.relay_28
-      - switch.relay_29
-      - switch.relay_30
-      - switch.relay_31
-      - switch.relay_32
-  
-  equipements:
-    name: "Équipements Spéciaux"
-    entities:
-      - switch.relay_33
-      - switch.relay_34
-      - switch.relay_35
-      - switch.relay_36
-      - switch.relay_37
-      - switch.relay_38
-      - switch.relay_39
-      - switch.relay_40
-      - switch.relay_41
-      - switch.relay_42
-      - switch.relay_43
-
-# ==================== HTTP ====================
-http:
-  server_port: 8123
+# ============================================================================
+# AUTOMATE 5 - Équipements (Slave ID: 5)
+# 11 relais: indices 0-6 (outputs) + 107-109 (memstate hack)
+# Write: 0x2C00-0x2C06 + memstate 0x0547-0x0549
+# Read Q: 0x0000-0x0006 | Read M (hack): memstate bits 7-10
+# ============================================================================
+  - name: imo_equipements
+    port: /dev/ttyUSB0
+    baudrate: 38400
+    bytesize: 8
+    slave_id: 5
+    relays:
+      # Q1-Q7 (Outputs 0-6)
+      - name: 'Salon Appoint'
+        address: 0x2C00
+        read_address: 0x0000
+        icon: mdi:radiator
+        
+      - name: 'Salon Ampli'
+        address: 0x2C01
+        read_address: 0x0001
+        icon: mdi:amplifier
+        
+      - name: 'Arrosage Zone 1'
+        address: 0x2C02
+        read_address: 0x0002
+        icon: mdi:sprinkler-variant
+        
+      - name: 'Arrosage Zone 2'
+        address: 0x2C03
+        read_address: 0x0003
+        icon: mdi:sprinkler-variant
+        
+      - name: 'Garage Porte'
+        address: 0x2C04
+        read_address: 0x0004
+        icon: mdi:garage-variant
+        
+      - name: 'Radiateur SDB'
+        address: 0x2C06
+        read_address: 0x0006
+        icon: mdi:radiator
+        
+      # Memstate outputs (hack: index > 100 dans scripts.js)
+      # Note: Ces adresses utilisent memState au lieu de outState
+      # Pour l'instant, on utilise les adresses de write comme read
+      # À ajuster si nécessaire après tests
+      - name: 'Prise Charge Scooter'
+        address: 0x0547
+        read_address: 0x0007
+        icon: mdi:ev-plug-type2
+        
+      - name: 'Borne Charge VE'
+        address: 0x0548
+        read_address: 0x0008
+        icon: mdi:ev-station
+        
+      - name: 'Arrosage Auto'
+        address: 0x0549
+        read_address: 0x0009
+        icon: mdi:water-pump
