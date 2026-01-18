@@ -239,7 +239,7 @@ MIT License - Voir [LICENSE](LICENSE)
 
 **Version:** 1.0.0  
 **Dernière mise à jour:** Janvier 2025  
-**Auteur:** Gabriel
+**Auteur:** Artemisfowl
 
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5?style=for-the-badge
 [hacs-url]: https://github.com/hacs/integration
