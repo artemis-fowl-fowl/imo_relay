@@ -24,7 +24,9 @@ DEFAULT_BYTESIZE = 8
 DEFAULT_SLAVE_ID = 1
 DEFAULT_ICON = "mdi:electric-switch"
 
-# Modbus defaults
-DEFAULT_PARITY = "N"
+# Modbus defaults (corrected to match working config with parity E)
+DEFAULT_PARITY = "E"
 DEFAULT_STOPBITS = 1
-DEFAULT_TIMEOUT = 3
+DEFAULT_TIMEOUT = 5
+DEFAULT_DELAY = 0
+DEFAULT_MESSAGE_WAIT_MS = 30

@@ -16,11 +16,13 @@ class ModbusRTUClient:
         port: str,
         baudrate: int = 38400,
         bytesize: int = 8,
-        parity: str = "N",
+        parity: str = "E",
         stopbits: int = 1,
-        timeout: int = 3,
+        timeout: int = 5,
         slave_id: int = 1,
-        name: str = "IMO Relay"
+        name: str = "IMO Relay",
+        delay: int = 0,
+        message_wait_ms: int = 30,
     ):
         """Initialiser le client Modbus RTU."""
         self.port = port
@@ -31,6 +33,8 @@ class ModbusRTUClient:
         self.timeout = timeout
         self.slave_id = slave_id
         self.name = name
+        self.delay = delay
+        self.message_wait_ms = message_wait_ms
         
         self.client = ModbusSerialClient(
             port=port,

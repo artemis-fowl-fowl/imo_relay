@@ -1,9 +1,10 @@
 # Configuration complète pour les 5 automates IMO Ismart SMT-CD-T20 3RD
-# Port: /dev/ttyUSB0, Baudrate: 38400, Bytesize: 8
+# Port: /dev/ttyUSB0, Baudrate: 38400, Bytesize: 8, Parity: E (Even)
 
 # ============================================================================
 # CONFIGURATION UNIQUE IMO RELAY (tous automates via device_id par relais)
 # Écrire/Lire sur plusieurs esclaves dans une seule instance
+# Paramètres série: parity E, stopbits 1, timeout 5, delay 0, message_wait 30ms
 # ============================================================================
 imo_relay:
   port: /dev/ttyUSB0

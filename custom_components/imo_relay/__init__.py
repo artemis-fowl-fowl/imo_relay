@@ -57,13 +57,18 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     
     conf = config[DOMAIN]
     
-    # Créer le client Modbus
+    # Créer le client Modbus (with parity E like working config)
     client = ModbusRTUClient(
         port=conf[CONF_PORT],
         baudrate=conf[CONF_BAUDRATE],
         bytesize=conf[CONF_BYTESIZE],
+        parity="E",
+        stopbits=1,
+        timeout=5,
         slave_id=conf[CONF_SLAVE_ID],
-        name=conf[CONF_NAME]
+        name=conf[CONF_NAME],
+        delay=0,
+        message_wait_ms=30,
     )
     
     # Test de connexion
