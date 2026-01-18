@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration IMO Relay",
+        "description": "Configurez votre connexion Modbus RTU",
+        "data": {
+          "port": "Port série (ex: /dev/ttyUSB0)",
+          "baudrate": "Vitesse (baudrate)",
+          "bytesize": "Taille des données",
+          "slave_id": "Adresse Modbus (Slave ID)",
+          "name": "Nom du dispositif"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de se connecter",
+      "invalid_auth": "Authentification invalide",
+      "unknown": "Erreur inconnue"
+    },
+    "abort": {
+      "already_configured": "Dispositif déjà configuré"
+    }
+  }
+}

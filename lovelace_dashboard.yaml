@@ -1,0 +1,86 @@
+# Dashboard Lovelace stylisé - Mode: YAML
+
+title: IMO Relay Control
+views:
+  - title: Relais IMO Ismart
+    path: imo_relay
+    cards:
+      # En-tête
+      - type: markdown
+        content: |
+          # 🎛️ Contrôle des Relais IMO Ismart SMT-CD-T20
+          Statut en temps réel de vos automates Modbus RS485
+
+      # Relais 1
+      - type: custom:button-card
+        entity: switch.relay_1
+        name: Relay 1
+        icon: mdi:power-socket
+        size: 20%
+        state:
+          - value: "on"
+            color: rgb(0, 255, 0)
+            icon: mdi:power-socket
+          - value: "off"
+            color: rgb(200, 200, 200)
+            icon: mdi:power-socket-off
+        tap_action:
+          action: toggle
+
+      # Relais 2
+      - type: custom:button-card
+        entity: switch.relay_2
+        name: Relay 2
+        icon: mdi:power-socket
+        size: 20%
+        state:
+          - value: "on"
+            color: rgb(0, 255, 0)
+            icon: mdi:power-socket
+          - value: "off"
+            color: rgb(200, 200, 200)
+            icon: mdi:power-socket-off
+        tap_action:
+          action: toggle
+
+      # Relais 3
+      - type: custom:button-card
+        entity: switch.relay_3
+        name: Relay 3
+        icon: mdi:power-socket
+        size: 20%
+        state:
+          - value: "on"
+            color: rgb(0, 255, 0)
+            icon: mdi:power-socket
+          - value: "off"
+            color: rgb(200, 200, 200)
+            icon: mdi:power-socket-off
+        tap_action:
+          action: toggle
+
+      # Relais 4
+      - type: custom:button-card
+        entity: switch.relay_4
+        name: Relay 4
+        icon: mdi:power-socket
+        size: 20%
+        state:
+          - value: "on"
+            color: rgb(0, 255, 0)
+            icon: mdi:power-socket
+          - value: "off"
+            color: rgb(200, 200, 200)
+            icon: mdi:power-socket-off
+        tap_action:
+          action: toggle
+
+      # Vue d'ensemble (optionnel - nécessite custom:state-switch-entity-row)
+      - type: entities
+        title: État des Relais
+        entities:
+          - switch.relay_1
+          - switch.relay_2
+          - switch.relay_3
+          - switch.relay_4
+        show_header_toggle: true

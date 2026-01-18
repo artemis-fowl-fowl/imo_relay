@@ -1,0 +1,38 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Home Assistant
+configuration.yaml
+secrets.yaml
+automations.yaml
+scripts.yaml
+scenes.yaml
