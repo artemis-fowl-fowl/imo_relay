@@ -86,7 +86,7 @@ class ModbusRTUClient:
             result = self.client.write_coil(
                 address=address,
                 value=state,
-                slave=self.slave_id
+                unit=self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -127,7 +127,7 @@ class ModbusRTUClient:
             result = self.client.read_coils(
                 address=address,
                 count=1,
-                slave=self.slave_id
+                unit=self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -173,7 +173,7 @@ class ModbusRTUClient:
             result = self.client.write_register(
                 address=address,
                 value=value,
-                slave=self.slave_id
+                unit=self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -210,7 +210,7 @@ class ModbusRTUClient:
             result = self.client.read_holding_registers(
                 address=address,
                 count=1,
-                slave=self.slave_id
+                unit=self.slave_id
             )
             
             if isinstance(result, ExceptionResponse):
