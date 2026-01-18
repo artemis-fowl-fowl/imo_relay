@@ -5,9 +5,10 @@
   "config_flow": false,
   "documentation": "https://github.com/artemis-fowl-fowl/imo_relay",
   "requirements": [
-    "pymodbus==3.6.0"
+    "pymodbus>=3.6.0"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homeassistant": "2024.1.0",
-  "iot_class": "local_polling"
+  "iot_class": "local_polling",
+  "multiple": true
 }

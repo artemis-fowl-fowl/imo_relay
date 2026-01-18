@@ -1,0 +1,143 @@
+# Configuration Home Assistant Fonctionnelle - IMO Ismart Modbus
+# Version 1.0.1 - Support pour plusieurs instances (slave_id 1, 2, 5)
+
+homeassistant:
+  name: Maison IMO
+  latitude: 48.8566
+  longitude: 2.3522
+  elevation: 0
+  unit_system: metric
+  time_zone: Europe/Paris
+
+# ==================== INSTANCE 1: AUTOMATE 1 - ÉTAGE ====================
+imo_relay:
+  port: "/dev/ttyUSB0"
+  baudrate: 38400
+  bytesize: 8
+  slave_id: 1
+  name: "Automate 1 - Étage"
+  
+  relays:
+    # Chambre Parents
+    - name: "Chambre Parents"
+      address: 0x2C00
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Dressing
+    - name: "Dressing"
+      address: 0x2C01
+      icon: mdi:hanger
+      device_class: switch
+    
+    # Chambre Gabriel
+    - name: "Chambre Gabriel"
+      address: 0x2C02
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Chambre Paul
+    - name: "Chambre Paul"
+      address: 0x2C03
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Chambre Sophie
+    - name: "Chambre Sophie"
+      address: 0x2C04
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # SDB Éclairage
+    - name: "SDB Éclairage"
+      address: 0x2C05
+      icon: mdi:shower
+      device_class: switch
+    
+    # Miroir SDB
+    - name: "Miroir SDB"
+      address: 0x2C06
+      icon: mdi:mirror
+      device_class: switch
+    
+    # Douche Éclairage
+    - name: "Douche Éclairage"
+      address: 0x2C07
+      icon: mdi:shower
+      device_class: switch
+    
+    # Grenier
+    - name: "Grenier"
+      address: 0x2C10
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Couloir Étage
+    - name: "Couloir Étage"
+      address: 0x2C11
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Mezzanine
+    - name: "Mezzanine"
+      address: 0x2C12
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Séjour Étage
+    - name: "Séjour Étage"
+      address: 0x2C13
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Passerelle
+    - name: "Passerelle"
+      address: 0x2C14
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cabanon
+    - name: "Cabanon"
+      address: 0x2C15
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # SDJ
+    - name: "SDJ"
+      address: 0x2C16
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # WC Étage
+    - name: "WC Étage"
+      address: 0x2C17
+      icon: mdi:toilet
+      device_class: switch
+
+# ==================== AJOUTER 2ÈME INSTANCE (OPTIONNEL) ====================
+# Décommente et adapte pour ajouter Automate 2 (RDC):
+# imo_relay_rdc:
+#   port: "/dev/ttyUSB0"
+#   baudrate: 38400
+#   bytesize: 8
+#   slave_id: 2
+#   name: "Automate 2 - RDC"
+#   relays:
+#     - name: "Salon 1"
+#       address: 0x2C00
+#     # ... etc
+
+# ==================== LOGGER ====================
+logger:
+  default: warning
+  logs:
+    custom_components.imo_relay: debug
+
+# ==================== AUTOMATIONS ====================
+automation: !include automations.yaml
+
+# ==================== SCRIPTS ====================
+script: !include scripts.yaml
+
+# ==================== GROUPS ====================
+group: !include groups.yaml

@@ -1,0 +1,677 @@
+# Dashboard Lovelace Complet et Fonctionnel
+# Mode: UI YAML - À importer dans Home Assistant
+
+title: Contrôle Maison IMO
+views:
+  # ==================== Vue 1: Accueil ====================
+  - title: 🏠 Accueil
+    path: accueil
+    icon: mdi:home
+    cards:
+      - type: markdown
+        content: |
+          # 🏠 Maison IMO Ismart
+          **Système domotique Modbus RTU**
+          
+          Dernière mise à jour: 18 janvier 2026
+          État du système: 🟢 Connecté
+
+      - type: entities
+        title: "📊 État Global"
+        entities:
+          - entity: group.eclairages_etage
+            name: "Éclairages Étage"
+          - entity: group.eclairages_rdc
+            name: "Éclairages RDC"
+          - entity: group.equipements
+            name: "Équipements"
+        state_color: true
+
+      - type: button
+        name: "💡 Tous les Éclairages ON"
+        icon: mdi:lightbulb-on
+        tap_action:
+          action: call-service
+          service: script.allumer_tous_les_eclairages
+
+      - type: button
+        name: "🌙 Tous les Éclairages OFF"
+        icon: mdi:lightbulb-off
+        tap_action:
+          action: call-service
+          service: script.eteindre_tous_les_eclairages
+
+  # ==================== Vue 2: Étage ====================
+  - title: "🛏️ Étage"
+    path: etage
+    icon: mdi:bed-double
+    cards:
+      - type: heading
+        heading: "Étage - Éclairages et Équipements"
+
+      - type: grid
+        columns: 3
+        cards:
+          # Chambre Parents
+          - type: button
+            entity: switch.relay_1
+            name: "👨‍👩‍👧 Parents"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Dressing
+          - type: button
+            entity: switch.relay_2
+            name: "👔 Dressing"
+            icon: mdi:hanger
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Chambre Gabriel
+          - type: button
+            entity: switch.relay_3
+            name: "🧒 Gabriel"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Chambre Paul
+          - type: button
+            entity: switch.relay_4
+            name: "🧒 Paul"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Chambre Sophie
+          - type: button
+            entity: switch.relay_5
+            name: "👧 Sophie"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # SDB Éclairage
+          - type: button
+            entity: switch.relay_6
+            name: "🚿 SDB"
+            icon: mdi:shower
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(100, 150, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Miroir SDB
+          - type: button
+            entity: switch.relay_7
+            name: "🪞 Miroir"
+            icon: mdi:mirror
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Douche
+          - type: button
+            entity: switch.relay_8
+            name: "🚿 Douche"
+            icon: mdi:shower
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(100, 150, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Grenier
+          - type: button
+            entity: switch.relay_9
+            name: "🪜 Grenier"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Couloir Étage
+          - type: button
+            entity: switch.relay_10
+            name: "🚶 Couloir"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Mezzanine
+          - type: button
+            entity: switch.relay_11
+            name: "🛝 Mezzanine"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Séjour Étage
+          - type: button
+            entity: switch.relay_12
+            name: "🪑 Séjour"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Passerelle
+          - type: button
+            entity: switch.relay_13
+            name: "🌉 Passerelle"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Cabanon
+          - type: button
+            entity: switch.relay_14
+            name: "🏠 Cabanon"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # SDJ
+          - type: button
+            entity: switch.relay_15
+            name: "🛏️ SDJ"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # WC Étage
+          - type: button
+            entity: switch.relay_16
+            name: "🚽 WC"
+            icon: mdi:toilet
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+  # ==================== Vue 3: RDC ====================
+  - title: "🍽️ RDC"
+    path: rdc
+    icon: mdi:kitchen
+    cards:
+      - type: heading
+        heading: "Rez-de-Chaussée - Éclairages et Équipements"
+
+      - type: grid
+        columns: 3
+        cards:
+          # Salon 1
+          - type: button
+            entity: switch.relay_17
+            name: "🪑 Salon 1"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Salon 2
+          - type: button
+            entity: switch.relay_18
+            name: "🪑 Salon 2"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Cuisine
+          - type: button
+            entity: switch.relay_19
+            name: "👨‍🍳 Cuisine"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Îlot Cuisine
+          - type: button
+            entity: switch.relay_20
+            name: "🏝️ Îlot"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Évier
+          - type: button
+            entity: switch.relay_21
+            name: "🚰 Évier"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Terrasse
+          - type: button
+            entity: switch.relay_22
+            name: "🌳 Terrasse"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Buanderie
+          - type: button
+            entity: switch.relay_23
+            name: "👕 Buanderie"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Miroir SDB RDC
+          - type: button
+            entity: switch.relay_24
+            name: "🪞 Miroir"
+            icon: mdi:mirror
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # WC RDC
+          - type: button
+            entity: switch.relay_25
+            name: "🚽 WC"
+            icon: mdi:toilet
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Hall
+          - type: button
+            entity: switch.relay_26
+            name: "🚪 Hall"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Cellier
+          - type: button
+            entity: switch.relay_27
+            name: "📦 Cellier"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Atelier
+          - type: button
+            entity: switch.relay_28
+            name: "🔧 Atelier"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Préau
+          - type: button
+            entity: switch.relay_29
+            name: "🏛️ Préau"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Garage
+          - type: button
+            entity: switch.relay_30
+            name: "🚗 Garage"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Cave
+          - type: button
+            entity: switch.relay_31
+            name: "🕳️ Cave"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Cour
+          - type: button
+            entity: switch.relay_32
+            name: "⛰️ Cour"
+            icon: mdi:lightbulb
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+  # ==================== Vue 4: Équipements ====================
+  - title: "⚙️ Équipements"
+    path: equipements
+    icon: mdi:cog
+    cards:
+      - type: heading
+        heading: "Équipements Spéciaux et Services"
+
+      - type: grid
+        columns: 2
+        cards:
+          # Radiateur SDB
+          - type: button
+            entity: switch.relay_33
+            name: "🌡️ Radiateur SDB"
+            icon: mdi:radiator
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 100, 100)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Salon Point A
+          - type: button
+            entity: switch.relay_34
+            name: "🎵 Salon Point A"
+            icon: mdi:speaker
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(100, 200, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Ampli Salon
+          - type: button
+            entity: switch.relay_35
+            name: "🎚️ Ampli Salon"
+            icon: mdi:amplifier
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(100, 200, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Arrosage Zone 1
+          - type: button
+            entity: switch.relay_36
+            name: "💧 Arrosage Z1"
+            icon: mdi:sprinkler
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 150, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Arrosage Zone 2
+          - type: button
+            entity: switch.relay_37
+            name: "💧 Arrosage Z2"
+            icon: mdi:sprinkler
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 150, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Arrosage Auto
+          - type: button
+            entity: switch.relay_38
+            name: "🤖 Arrosage Auto"
+            icon: mdi:sprinkler-variant
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 150, 255)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Borne Charge VE
+          - type: button
+            entity: switch.relay_39
+            name: "🔌 Borne VE"
+            icon: mdi:ev-station
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 200, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Prise Charge Scooter
+          - type: button
+            entity: switch.relay_40
+            name: "⚡ Prise Scooter"
+            icon: mdi:power-plug
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 150, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Alarme
+          - type: button
+            entity: switch.relay_41
+            name: "🚨 Alarme"
+            icon: mdi:alarm
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(255, 0, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Portail Cour
+          - type: button
+            entity: switch.relay_42
+            name: "🚪 Portail Cour"
+            icon: mdi:gate
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 150, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle
+
+          # Garage Door
+          - type: button
+            entity: switch.relay_43
+            name: "🏠 Porte Garage"
+            icon: mdi:garage
+            icon_height: 30px
+            state:
+              - value: "on"
+                color: rgb(0, 150, 0)
+              - value: "off"
+                color: rgb(100, 100, 100)
+            tap_action:
+              action: toggle

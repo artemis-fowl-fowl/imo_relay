@@ -1,0 +1,440 @@
+# Configuration Home Assistant Complète - IMO Ismart Modbus
+# Configuration pour 3 instances (Automate 1, 2 et 5)
+
+homeassistant:
+  name: Maison IMO
+  latitude: 48.8566
+  longitude: 2.3522
+  elevation: 0
+  unit_system: metric
+  time_zone: Europe/Paris
+
+# ==================== INSTANCE 1: AUTOMATE 1 - ÉTAGE ====================
+imo_relay:
+  port: "/dev/ttyUSB0"
+  baudrate: 38400
+  bytesize: 8
+  slave_id: 1
+  name: "Automate 1 - Étage"
+  relays:
+    # Chambre Parents
+    - name: "Chambre Parents"
+      address: 0x2C00
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Dressing
+    - name: "Dressing"
+      address: 0x2C01
+      icon: mdi:hanger
+      device_class: switch
+    
+    # Chambre Gabriel
+    - name: "Chambre Gabriel"
+      address: 0x2C02
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Chambre Paul
+    - name: "Chambre Paul"
+      address: 0x2C03
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Chambre Sophie
+    - name: "Chambre Sophie"
+      address: 0x2C04
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Salle de bain
+    - name: "SDB Éclairage"
+      address: 0x2C05
+      icon: mdi:shower
+      device_class: switch
+    
+    # Miroir SDB
+    - name: "Miroir SDB"
+      address: 0x2C06
+      icon: mdi:mirror
+      device_class: switch
+    
+    # Douche
+    - name: "Douche Éclairage"
+      address: 0x2C07
+      icon: mdi:shower
+      device_class: switch
+    
+    # Grenier
+    - name: "Grenier"
+      address: 0x2C10
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Couloir Étage
+    - name: "Couloir Étage"
+      address: 0x2C11
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Mezzanine
+    - name: "Mezzanine"
+      address: 0x2C12
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Séjour Étage
+    - name: "Séjour Étage"
+      address: 0x2C13
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Passerelle
+    - name: "Passerelle"
+      address: 0x2C14
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cabanon
+    - name: "Cabanon"
+      address: 0x2C15
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Suite Développement Jeunes
+    - name: "SDJ"
+      address: 0x2C16
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # WC Étage
+    - name: "WC Étage"
+      address: 0x2C17
+      icon: mdi:toilet
+      device_class: switch
+
+# ==================== INSTANCE 2: AUTOMATE 2 - RDC ====================
+# Pour ajouter une 2ème instance, duplique cette config avec un nom d'instance différent
+# À ajouter après la première instance imo_relay:
+# imo_relay_rdc:
+#   port: "/dev/ttyUSB0"
+#   baudrate: 38400
+#   bytesize: 8
+#   slave_id: 2
+#   name: "Automate 2 - RDC"
+#   relays:
+    # Salon 1
+    - name: "Salon 1"
+      address: 0x2C00
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Salon 2
+    - name: "Salon 2"
+      address: 0x2C01
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cuisine
+    - name: "Cuisine"
+      address: 0x2C02
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Îlot Cuisine
+    - name: "Îlot Cuisine"
+      address: 0x2C03
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Évier
+    - name: "Évier"
+      address: 0x2C04
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Terrasse
+    - name: "Terrasse"
+      address: 0x2C05
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Buanderie
+    - name: "Buanderie"
+      address: 0x2C06
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Miroir Salle de bain RDC
+    - name: "Miroir SDB RDC"
+      address: 0x2C07
+      icon: mdi:mirror
+      device_class: switch
+    
+    # WC RDC
+    - name: "WC RDC"
+      address: 0x2C10
+      icon: mdi:toilet
+      device_class: switch
+    
+    # Hall
+    - name: "Hall"
+      address: 0x2C11
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cellier
+    - name: "Cellier"
+      address: 0x2C12
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Atelier
+    - name: "Atelier"
+      address: 0x2C13
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Préau
+    - name: "Préau"
+      address: 0x2C14
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Garage
+    - name: "Garage Éclairage"
+      address: 0x2C15
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cave
+    - name: "Cave"
+      address: 0x2C16
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Cour
+    - name: "Cour Éclairage"
+      address: 0x2C17
+      icon: mdi:lightbulb
+      device_class: switch
+
+# ==================== INSTANCE 3: AUTOMATE 5 - ÉQUIPEMENTS ====================
+# À ajouter après les autres instances:
+# imo_relay_equipements:
+#   port: "/dev/ttyUSB0"
+#   baudrate: 38400
+#   bytesize: 8
+#   slave_id: 5
+#   name: "Automate 5 - Équipements"
+#   relays:
+    # Radiateur SDB
+    - name: "Radiateur SDB"
+      address: 0x2C06
+      icon: mdi:radiator
+      device_class: switch
+    
+    # Salon Point A
+    - name: "Salon Point A"
+      address: 0x2C00
+      icon: mdi:lightbulb
+      device_class: switch
+    
+    # Ampli Salon
+    - name: "Ampli Salon"
+      address: 0x2C01
+      icon: mdi:amplifier
+      device_class: switch
+    
+    # Arrosage Zone 1
+    - name: "Arrosage Zone 1"
+      address: 0x2C02
+      icon: mdi:sprinkler
+      device_class: switch
+    
+    # Arrosage Zone 2
+    - name: "Arrosage Zone 2"
+      address: 0x2C03
+      icon: mdi:sprinkler
+      device_class: switch
+    
+    # Arrosage Auto
+    - name: "Arrosage Auto"
+      address: 0x0549
+      icon: mdi:sprinkler
+      device_class: switch
+    
+    # Borne Charge VE
+    - name: "Borne Charge VE"
+      address: 0x0548
+      icon: mdi:ev-station
+      device_class: outlet
+    
+    # Prise Charge Scooter
+    - name: "Prise Charge Scooter"
+      address: 0x0547
+      icon: mdi:power-plug
+      device_class: outlet
+    
+    # Alarme
+    - name: "Alarme Maison"
+      address: 0x2C09
+      icon: mdi:alarm
+      device_class: switch
+    
+    # Portail Cour
+    - name: "Portail Cour"
+      address: 0x2C13
+      icon: mdi:gate
+      device_class: switch
+    
+    # Porte Garage
+    - name: "Porte Garage"
+      address: 0x2C04
+      icon: mdi:garage
+      device_class: switch
+
+# ==================== LOGGER ====================
+logger:
+  default: warning
+  logs:
+    custom_components.imo_relay: debug
+    pymodbus.client: warning
+
+# ==================== AUTOMATIONS ====================
+automation:
+  # Automatisation des lumières par motion (exemple)
+  - alias: "Lumière couloir auto"
+    trigger:
+      platform: time_pattern
+      minutes: "/5"
+    condition:
+      - condition: time
+        after: "22:00:00"
+        before: "06:00:00"
+    action:
+      service: switch.turn_on
+      target:
+        entity_id: switch.relay_9
+
+# ==================== SCRIPTS ====================
+script:
+  allumer_tous_les_eclairages:
+    sequence:
+      - service: switch.turn_on
+        target:
+          entity_id:
+            - switch.relay_1
+            - switch.relay_2
+            - switch.relay_3
+            - switch.relay_4
+            - switch.relay_5
+            - switch.relay_7
+            - switch.relay_9
+            - switch.relay_10
+            - switch.relay_11
+            - switch.relay_12
+            - switch.relay_13
+            - switch.relay_14
+            - switch.relay_15
+            - switch.relay_16
+  
+  eteindre_tous_les_eclairages:
+    sequence:
+      - service: switch.turn_off
+        target:
+          entity_id:
+            - switch.relay_1
+            - switch.relay_2
+            - switch.relay_3
+            - switch.relay_4
+            - switch.relay_5
+            - switch.relay_7
+            - switch.relay_9
+            - switch.relay_10
+            - switch.relay_11
+            - switch.relay_12
+            - switch.relay_13
+            - switch.relay_14
+            - switch.relay_15
+            - switch.relay_16
+
+# ==================== INPUT BOOLEAN (pour tester) ====================
+input_boolean:
+  test_mode:
+    name: "Mode Test"
+    icon: mdi:test-tube
+  
+  allumer_etage:
+    name: "Allumer Étage"
+    icon: mdi:lightbulb
+
+# ==================== GROUPS ====================
+homeassistant:
+  customize:
+    group.eclairages_etage:
+      icon: mdi:lightbulb-group
+    group.eclairages_rdc:
+      icon: mdi:lightbulb-group
+    group.equipements:
+      icon: mdi:cog
+
+group:
+  eclairages_etage:
+    name: "Éclairages Étage"
+    entities:
+      - switch.relay_1
+      - switch.relay_2
+      - switch.relay_3
+      - switch.relay_4
+      - switch.relay_5
+      - switch.relay_6
+      - switch.relay_7
+      - switch.relay_8
+      - switch.relay_9
+      - switch.relay_10
+      - switch.relay_11
+      - switch.relay_12
+      - switch.relay_13
+      - switch.relay_14
+      - switch.relay_15
+      - switch.relay_16
+  
+  eclairages_rdc:
+    name: "Éclairages RDC"
+    entities:
+      - switch.relay_17
+      - switch.relay_18
+      - switch.relay_19
+      - switch.relay_20
+      - switch.relay_21
+      - switch.relay_22
+      - switch.relay_23
+      - switch.relay_24
+      - switch.relay_25
+      - switch.relay_26
+      - switch.relay_27
+      - switch.relay_28
+      - switch.relay_29
+      - switch.relay_30
+      - switch.relay_31
+      - switch.relay_32
+  
+  equipements:
+    name: "Équipements Spéciaux"
+    entities:
+      - switch.relay_33
+      - switch.relay_34
+      - switch.relay_35
+      - switch.relay_36
+      - switch.relay_37
+      - switch.relay_38
+      - switch.relay_39
+      - switch.relay_40
+      - switch.relay_41
+      - switch.relay_42
+      - switch.relay_43
+
+# ==================== HTTP ====================
+http:
+  server_port: 8123
