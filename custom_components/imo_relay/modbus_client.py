@@ -7,7 +7,6 @@ from pymodbus.pdu import ExceptionResponse
 
 _LOGGER = logging.getLogger(__name__)
 
-
 class ModbusRTUClient:
     """Client Modbus RTU pour contrôler les relais IMO Ismart."""
     
@@ -16,8 +15,8 @@ class ModbusRTUClient:
         port: str,
         baudrate: int = 38400,
         bytesize: int = 8,
-        parity: str = "E",
-        stopbits: int = 1,
+        parity: str = "N",
+        stopbits: int = 2,
         timeout: int = 5,
         slave_id: int = 1,
         name: str = "IMO Relay",
