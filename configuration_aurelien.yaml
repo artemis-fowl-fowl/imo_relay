@@ -1,0 +1,68 @@
+# Configuration pour Home Assistant - à mettre dans configuration.yaml
+
+imo_relay:
+  port: "/dev/ttyUSB0"  # Sur Raspberry Pi: /dev/ttyUSB0 ou /dev/ttyUSB1
+  baudrate: 38400
+  bytesize: 8
+  slave_id: 1
+  name: "IMO Ismart"
+
+  lights:
+    - name: "CH1.1"
+      device id: 1
+      coil: 0x550
+      read_address: 0x613
+      position: 1
+      #icon:
+      #device_class:
+
+#  shutters:
+#    - name: "CH1"
+#      device_id: 3
+#      up_coil: 0x550
+#      down_coil: 0x551
+#      out_address: 0x613
+#      up_pos: 1
+#      down_pos: 2
+      #state_address: 0x608
+      #state_up_pos: 1
+      #state_down_pos: 2
+      #icon:
+      #device_class:
+
+  # Définir vos relais/coils personnalisés
+  #relays:
+  #  - name: "Pompe Piscine"
+  #    address: 0x0551
+  #    icon: mdi:pump
+  #    device_class: switch
+
+# Automation exemple
+#automation:
+#  - alias: "Allumer Relay 1"
+#    trigger:
+#      platform: state
+#      entity_id: input_boolean.test_relay1
+#      to: "on"
+#    action:
+#      service: imo_relay.write_coil
+#      data:
+#        address: 0x0551
+#        state: true
+
+#   - alias: "Éteindre Relay 1"
+#    trigger:
+#      platform: state
+#      entity_id: input_boolean.test_relay1
+#      to: "off"
+#    action:
+#      service: imo_relay.write_coil
+#      data:
+#        address: 0x0551
+#        state: false
+
+# Helper pour tester
+#input_boolean:
+#  test_relay1:
+#    name: "Test Relay 1"
+#    icon: mdi:power

@@ -72,7 +72,7 @@ class ModbusRTUClient:
         except Exception as e:
             _LOGGER.error(f"Error closing connection: {e}")
     
-    def write_coil(self, address: int, state: bool, device_id: int | None = None) -> bool:
+    def write_coil(self, address: int, state: bool, device_id: int) -> bool:
         """
         Écrire une bobine (coil).
         
@@ -89,7 +89,7 @@ class ModbusRTUClient:
             result = self.client.write_coil(
                 address,
                 state,
-                device_id=device_id or self.slave_id
+                device_id=device_id
             )
             
             if isinstance(result, ExceptionResponse):
@@ -153,58 +153,47 @@ class ModbusRTUClient:
             _LOGGER.error(f"Modbus error reading coil {address:04X}: {e}")
             return None
 
-    def read_bit(self, address: int, device_id: int | None = None) -> Optional[bool]:
+    def read_bit(self, address: int, position: int, device_id: int) -> Optional[bool]:
         """
         Lire un bit spécifique en lisant le holding register 0x0613.
 
         Args:
-            address: Adresse logique (0x0000-0x0007 pour Q, 0x0010-0x0017 pour Y)
-            device_id: Esclave Modbus à interroger
+            device_id: Esclave Modbus
+            address: 
+            position
+
 
         Returns:
             bool ou None
         """
+        if position not in (0,16):
+            _LOGGER.error(f"Bit position is not in [0~15]")
+            return None
         try:
             if not self.client.connected:
                 _LOGGER.warning("Client not connected, attempting to reconnect...")
                 self.connect()
 
             # Lire le holding register complet
-            register_address = 0x0613
-            _LOGGER.debug(f"Reading register {register_address:04X} to get bit at logical address {address:04X}")
+            _LOGGER.debug(f"Reading register {address:04X} to get bit {position}")
             
-            result = self.client.read_holding_registers(
-                address=register_address,
-                count=1,
-                slave=device_id or self.slave_id,
-            )
-
+            result = self.client.read_holding_registers(address = address, count = 1, slave = device_id)
             if isinstance(result, ExceptionResponse):
-                _LOGGER.error(f"Modbus exception reading register {register_address:04X}: {result}")
+                _LOGGER.error(f"Modbus exception reading register 0x{address:04X}: {result}")
                 return None
 
             if result.isError():
-                _LOGGER.error(f"Failed to read register {register_address:04X}: {result}")
+                _LOGGER.error(f"Failed to read register 0x{address:04X}: {result}")
                 return None
 
             if not hasattr(result, 'registers') or not result.registers:
-                _LOGGER.error(f"Invalid response for register {register_address:04X}: no registers")
+                _LOGGER.error(f"Invalid response for register 0x{address:04X}: no registers")
                 return None
 
             # Extraire le bit correspondant
-            register_value = result.registers[0]
-            
-            # Conversion adresse logique → index de bit (0-15)
-            if address <= 0x0007:
-                bit_index = address
-            elif address >= 0x0010 and address <= 0x0017:
-                bit_index = 8 + (address - 0x0010)
-            else:
-                _LOGGER.warning(f"Unknown address {address:04X}")
-                return None
-            
-            bit_value = (register_value & (1 << bit_index)) != 0
-            _LOGGER.debug(f"Register 0x{register_value:04X}, bit {bit_index} = {bit_value}")
+            value = result.registers[0]
+            bit_value = (value & (1 << position)) != 0
+            _LOGGER.debug(f"Register 0x{address:04X}, bit {position} = {bit_value}")
             return bit_value
 
         except Exception as e:

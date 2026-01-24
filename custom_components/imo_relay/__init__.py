@@ -22,19 +22,66 @@ from .const import (
     CONF_RELAY_ICON,
     CONF_RELAY_DEVICE_CLASS,
     CONF_RELAY_DEVICE_ID,
+    CONF_LIGHT_COIL_ADDRESS,
+    CONF_LIGHT_DEVICE_CLASS,
+    CONF_LIGHT_DEVICE_ID,
+    CONF_LIGHT_ICON,
+    CONF_LIGHT_NAME,
+    CONF_LIGHT_POSITION,
+    CONF_LIGHT_READ_ADDRESS,
+    CONF_SHUTTER_ICON,
+    CONF_SHUTTER_DEVICE_ID,
+    CONF_SHUTTER_DOWN_COIL,
+    CONF_SHUTTER_DOWN_POSITION,
+    CONF_SHUTTER_NAME,
+    CONF_SHUTTER_OUTPUT_ADDRESS,
+    CONF_SHUTTER_STATE_ADDRESS,
+    CONF_SHUTTER_STATE_DOWN_POSITION,
+    CONF_SHUTTER_STATE_UP_POSITION,
+    CONF_SHUTTER_UP_COIL,
+    CONF_SHUTTER_UP_POSITION,
+    CONF_SHUTTERT_DEVICE_CLASS,
 )
 from .modbus_client import ModbusRTUClient
 
 _LOGGER = logging.getLogger(__name__)
 
-# Schéma pour un relais individuel
+# individual relay schematic
+# Voluptuous is a librairy intended for validating data coming into Pyhton as JSON, YAML...
+# The schematic defines attributs that will be configured through the YAML
+# Attributs may bye required or optional. The have a name and 
 RELAY_SCHEMA = vol.Schema({
-    vol.Required(CONF_RELAY_NAME): cv.string,
-    vol.Required(CONF_RELAY_ADDRESS): cv.positive_int,
-    vol.Optional(CONF_RELAY_READ_ADDRESS): cv.positive_int,  # Adresse de lecture optionnelle
-    vol.Optional(CONF_RELAY_ICON, default="mdi:electric-switch"): cv.icon,
+    vol.Required(CONF_RELAY_NAME): cv.string,                   # RELAY_NAME (sring) required
+    vol.Required(CONF_RELAY_ADDRESS): cv.positive_int,          # Register address
+    vol.Optional(CONF_RELAY_READ_ADDRESS): cv.positive_int,     # Adresse de lecture optionnelle
+    vol.Optional(CONF_RELAY_ICON, default="mdi:electric-switch"): cv.icon,  # Icon symbole interrupteur classique
     vol.Optional(CONF_RELAY_DEVICE_CLASS): cv.string,
     vol.Optional(CONF_RELAY_DEVICE_ID): cv.positive_int,  # Identifiant esclave spécifique au relais
+})
+"""
+SHUTTER_SCHEMA = vol.Schema({
+    vol.Required(CONF_SHUTTER_NAME): cv.string,                                 # RELAY_NAME (sring) required
+    vol.Required(CONF_SHUTTER_DEVICE_ID): cv.positive_int,                      # Identifiant esclave spécifique au relais
+    vol.Required(CONF_SHUTTER_UP_COIL): cv.positive_int,                        # Coil address for shutter up drive
+    vol.Required(CONF_SHUTTER_DOWN_COIL): cv.positive_int,                      # Coil address for shutter down drive
+    vol.Required(CONF_SHUTTER_OUTPUT_ADDRESS): cv.positive_int,                 # Register adresse for shutter's moving state read
+    vol.Required(CONF_SHUTTER_UP_POSITION): cv.positive_int,                    # Position of up bit in state's register
+    vol.Required(CONF_SHUTTER_DOWN_POSITION): cv.positive_int,                  # Position of down bit in the state's register
+    vol.Optional(CONF_SHUTTER_STATE_ADDRESS): cv.positive_int,                  # Register adresse for shutter's state read (If not defined is the M register address corresponding to the output)
+    vol.Optional(CONF_SHUTTER_STATE_UP_POSITION): cv.positive_int,              # Position of up bit in the state's register (If not defined is same as SHUTTER_UP_POSITION)
+    vol.Optional(CONF_SHUTTER_STATE_DOWN_POSITION): cv.positive_int,            # Position of down bit in the state's register (If not defined is same as SHUTTER_DOWN_POSITION)
+    vol.Optional(CONF_SHUTTER_ICON, default="mdi:electric-switch"): cv.icon,
+    vol.Optional(CONF_SHUTTERT_DEVICE_CLASS): cv.string,   
+})
+"""
+LIGHT_SCHEMA = vol.Schema({
+    vol.Required(CONF_LIGHT_NAME): cv.string,                               # RELAY_NAME (sring) required
+    vol.Required(CONF_LIGHT_DEVICE_ID): cv.positive_int,                    # Identifiant esclave spécifique au relais
+    vol.Required(CONF_LIGHT_COIL_ADDRESS): cv.positive_int,                 # Coil address for light toggling
+    vol.Required(CONF_LIGHT_READ_ADDRESS): cv.positive_int,                 # Register adresse for light state read
+    vol.Required(CONF_LIGHT_POSITION): cv.positive_int,                     # Position of the light bit in the state's register
+    vol.Optional(CONF_LIGHT_ICON, default="mdi:electric-switch"): cv.icon,
+    vol.Optional(CONF_LIGHT_DEVICE_CLASS): cv.string,   
 })
 
 # Schéma de configuration
@@ -49,7 +96,7 @@ CONFIG_SCHEMA = vol.Schema({
     })
 }, extra=vol.ALLOW_EXTRA)
 
-
+# Appel du setup en asynchrone (il semble qu'il serait également possible de le faire en syncrhone)
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the IMO Relay integration from configuration.yaml."""
     if DOMAIN not in config:
@@ -62,7 +109,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         port=conf[CONF_PORT],
         baudrate=conf[CONF_BAUDRATE],
         bytesize=conf[CONF_BYTESIZE],
-        parity="E",
+        parity="N",
         stopbits=1,
         timeout=5,
         slave_id=conf[CONF_SLAVE_ID],
@@ -91,8 +138,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         """Boucle d'update automatique pour tous les relais (lecture groupée par automate)."""
         while True:
             try:
-                await asyncio.sleep(2)  # Update toutes les 2 secondes
-                
+                await asyncio.sleep(2)                              # Update toutes les 2 secondes
                 entities = hass.data[DOMAIN].get("entities", [])
                 relays_config = hass.data[DOMAIN]["relays"]
                 
