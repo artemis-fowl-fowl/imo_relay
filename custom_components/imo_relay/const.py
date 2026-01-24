@@ -10,8 +10,8 @@ CONF_BYTESIZE = "bytesize"
 CONF_SLAVE_ID = "slave_id"
 CONF_NAME = "name"
 CONF_RELAYS = "relays"
-CONF_SHUTTER = "shutters"
-CONF_LIGHT = "lights"
+CONF_SHUTTERS = "shutters"
+CONF_LIGHTS = "lights"
 
 # Light configuration keys
 CONF_LIGHT_NAME = "name"

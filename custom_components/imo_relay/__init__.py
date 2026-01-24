@@ -130,6 +130,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         "client": client,
         "config": conf,
         "relays": conf[CONF_RELAYS],
+        "lights": conf[CONF_LIGHTS],
         "entities": [],  # Liste des entités pour mise à jour globale
     }
     
@@ -212,5 +213,10 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     hass.async_create_task(
         async_load_platform(hass, Platform.SWITCH, DOMAIN, {}, config)
     )
-    
+
+    # Charger la plateforme light
+    hass.async_create_task(
+        async_load_platform(hass, Platform.LIGHT, DOMAIN, {}, config)
+    )
+
     return True
