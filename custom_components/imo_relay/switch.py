@@ -27,9 +27,10 @@ async def async_setup_platform(
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up switch platform from configuration.yaml."""
+    """Set up switch platform from configurationswitch.yaml."""
     client: ModbusRTUClient = hass.data[DOMAIN]["client"]
-    relays_config = hass.data[DOMAIN]["relays"]
+    relays_config = hass.data[DOMAIN]["switch"]
+    #lights_config = hass.data[DOMAIN]["ligths"]
     
     # Créer les entités de relais dynamiquement depuis la config
     entities = []
