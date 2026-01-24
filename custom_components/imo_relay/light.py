@@ -42,7 +42,7 @@ async def async_setup_platform(
         coil_address = light_conf[CONF_LIGHT_COIL_ADDRESS]
         read_address = light_conf.get(CONF_LIGHT_READ_ADDRESS)
         position = light_conf.get(CONF_LIGHT_POSITION)
-        icon = light_conf.get(CONF_LIGHT    _ICON, "mdi:electric-switch")
+        icon = light_conf.get(CONF_LIGHT_ICON, "mdi:electric-switch")
         device_class = light_conf.get(CONF_LIGHT_DEVICE_CLASS)
         device_id = light_conf.get(CONF_LIGHT_DEVICE_ID)
         
@@ -93,7 +93,7 @@ class IMOLightSwitch(SwitchEntity):
         self.position = position
         self.device_id = device_id
         self._attr_name = name
-        self._attr_unique_id = f"imo_relay_{relay_id}"
+        self._attr_unique_id = f"imo_relay_{light_id}"
         self._attr_icon = icon or "mdi:electric-switch"
         # Ignorer device_class pour éviter les sliders (juste des switches simples)
         self._state = False  # État par défaut: OFF
